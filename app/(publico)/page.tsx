@@ -1,10 +1,10 @@
+import Image from "next/image";
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, BookOpen, CheckCircle, BarChart2, Zap, HeadphonesIcon, Brain } from 'lucide-react'
 
 export default function Main() {
   return (
-
       <main className="container mx-auto px-4 py-8">
         <section className="flex flex-col md:flex-row items-center mb-16">
           <div className="md:w-1/2 mb-8 md:mb-0">
@@ -16,7 +16,13 @@ export default function Main() {
             </div>
           </div>
           <div className="md:w-1/2">
-            <img src="/placeholder.svg?height=400&width=400" alt="Estudiante usando Kaanbal" className="w-full" />
+            <Image
+              src="/principal.png"
+              width={400}
+              height={400}
+              className="w-full"
+              alt="Estudiante usando Kaanbal"
+            />
           </div>
         </section>
 
