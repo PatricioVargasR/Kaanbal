@@ -71,6 +71,49 @@ pnpm dlx shadcn@latest add [nombre del componente]
 pnpm add [nombre de la dependencia]
 ```
 
+## Estructura inicial
+
+A continuación, se retrata la estructura inicial del proyecto, se utiliza las arquitecturas de cliente-servidor, n-capas y microservicios, para más aclaración se utilizan comentarios generales que indican el por qué de cada elemento
+
+```bash
+├── app
+│   ├── api                             # Llamada a los servicios externos
+│   ├── favicon.ico
+│   ├── fonts
+│   │   ├── GeistMonoVF.woff
+│   │   └── GeistVF.woff
+│   ├── globals.css
+│   ├── middleware                      # Autenticación principal
+│   ├── (usuario)                       # Páginas privadas, autenticadas
+│   └── (publico)                       # Páginas públicas
+│       ├── acerca_nosotros
+│       │   └── page.tsx
+│       ├── layout.tsx
+│       ├── page.tsx
+│       └── precios
+│           └── page.tsx
+├── components                          # Componentes reutilizables
+│   └── ui
+│       ├── button.tsx
+│       ├── card.tsx
+│       └── sheet.tsx
+├── components.json
+├── db                                  # Módelos de datos y conexión a la base de datos
+├── lib                                 # Utilidades y fucniones helper
+│   └── utils.ts
+├── next.config.mjs
+├── next-env.d.ts
+├── node_modules
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.mjs
+├── public                              # Archivos estáticos accesibles públicamente
+├── README.md
+├── services                            # Lógica del negocio
+├── tailwind.config.ts
+└── tsconfig.json
+```
+
 ## ¿Dudas?
 
 Si tienes alguna duda de lo utilizado aquí, checa los siguientes documentos
