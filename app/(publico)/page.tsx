@@ -1,101 +1,173 @@
-import Image from "next/image";
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { ArrowRight, BookOpen, CheckCircle, BarChart2, Zap, HeadphonesIcon, Brain } from 'lucide-react'
 
-export default function Home() {
+export default function Main() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+      <main className="container mx-auto px-4 py-8">
+        <section className="flex flex-col md:flex-row items-center mb-16">
+          <div className="md:w-1/2 mb-8 md:mb-0">
+            <h1 className="text-4xl font-bold mb-4">Revoluciona tu forma de estudiar con esta herramienta de IA</h1>
+            <p className="mb-6">Genera contenido educativo dinámico y personalizado de manera sencilla. Ya sea que necesites ejercicios, resúmenes o evaluaciones, nuestra plataforma lo adapta a tus necesidades.</p>
+            <div className="space-x-4">
+              <Button className="bg-[#0f4c81] text-white hover:bg-[#0f4c81]/90">Inicia gratis</Button>
+              <Button variant="outline" className="border-[#0f4c81] text-[#0f4c81]">Ver planes</Button>
+            </div>
+          </div>
+          <div className="md:w-1/2">
+            <img src="/placeholder.svg?height=400&width=400" alt="Estudiante usando Kaanbal" className="w-full" />
+          </div>
+        </section>
+
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-center mb-8">¿Cómo quieres estudiar?</h2>
+          <p className="text-center mb-8">Domina lo que estás estudiando gracias a los diferentes tipos de actividades de estudio que puedes encontrar en Kaanbal.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="bg-[#98bee0]">
+              <CardHeader>
+                <CardTitle>Aprender</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <img src="/placeholder.svg?height=100&width=150" alt="Aprender" className="w-full mb-4" />
+                <p>Explora nuevos conceptos y temas</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-[#c4d8e9]">
+              <CardHeader>
+                <CardTitle>Probar</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between mb-4">
+                  <span>Tu tiempo: 6 min</span>
+                  <span className="text-2xl font-bold">75%</span>
+                </div>
+                <p>Pon a prueba tus conocimientos</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-[#98bee0]">
+              <CardHeader>
+                <CardTitle>Combinar</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between mb-4">
+                  <img src="/placeholder.svg?height=50&width=50" alt="Imagen 1" className="w-1/3" />
+                  <img src="/placeholder.svg?height=50&width=50" alt="Imagen 2" className="w-1/3" />
+                  <img src="/placeholder.svg?height=50&width=50" alt="Imagen 3" className="w-1/3" />
+                </div>
+                <p>Relaciona conceptos e ideas</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-[#c4d8e9]">
+              <CardHeader>
+                <CardTitle>Soluciones de experto</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <img src="/placeholder.svg?height=100&width=150" alt="Soluciones de experto" className="w-full mb-4" />
+                <p>Aprende de ejemplos resueltos</p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-center mb-8">Características principales</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <BookOpen className="mr-2" />
+                  Generación de Actividades Personalizadas
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Convierte tus notas en actividades interactivas en segundos, adaptadas a tus necesidades.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <BarChart2 className="mr-2" />
+                  Progreso y estadísticas
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Visualiza tu rendimiento y recibe recomendaciones para mejorar en tiempo real.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <CheckCircle className="mr-2" />
+                  Retroalimentación
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Recibe correcciones y sugerencias que te ayudan a identificar áreas clave de mejora.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Zap className="mr-2" />
+                  Interfaz Intuitiva
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Fácil de usar desde cualquier dispositivo, sin complicaciones.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <HeadphonesIcon className="mr-2" />
+                  Soporte Prioritario
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Disfruta de asistencia técnica y educativa rápida y eficiente.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Brain className="mr-2" />
+                  Inteligencia Artificial
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Aprende a tu ritmo con contenido generado automáticamente para ti, desde el nivel básico hasta avanzado.</p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-center mb-8">Kaanbal es perfecto para...</h2>
+          <div className="flex flex-wrap justify-center gap-8">
+            {['Alumnos', 'Profesores', 'Personas'].map((user, index) => (
+              <Card key={index} className="w-64">
+                <CardHeader>
+                  <CardTitle className="text-center">{user}</CardTitle>
+                </CardHeader>
+                <CardContent className="flex justify-center">
+                  <img src={`/placeholder.svg?height=100&width=100&text=${user}`} alt={user} className="rounded-full" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <Card className="bg-[#98bee0] mb-12">
+          <CardContent className="flex flex-col md:flex-row items-center justify-between p-6">
+            <div>
+              <h3 className="text-xl font-bold mb-2">¿Estás listo para conocer a tu nuevo acompañante de estudio?</h3>
+              <p>¡Toma acción ahora para marcar la diferencia en tu estudio! Ya sea desde un tema que te apasiona hasta algo que te agobia.</p>
+            </div>
+            <Button className="mt-4 md:mt-0 bg-[#0f4c81] text-white hover:bg-[#0f4c81]/90">Comenzar gratis</Button>
+          </CardContent>
+        </Card>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+
+  )
 }
