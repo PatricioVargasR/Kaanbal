@@ -1,12 +1,14 @@
-'use client'
-
-import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Check, X } from 'lucide-react'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Precios',
+};
 
 export default function Pricing() {
-  const [isAnnual, setIsAnnual] = useState(false)
+  // const [isAnnual, setIsAnnual] = useState(false)
 
   return (
       <main className="container mx-auto px-4 py-8">
@@ -17,15 +19,17 @@ export default function Pricing() {
           <div className="inline-flex rounded-md shadow-sm" role="group">
             <button
               type="button"
-              className={`px-4 py-2 text-sm font-medium rounded-l-lg ${!isAnnual ? 'bg-[#0f4c81] text-white' : 'bg-white text-[#0f4c81]'}`}
-              onClick={() => setIsAnnual(false)}
+              // className={`px-4 py-2 text-sm font-medium rounded-l-lg ${!isAnnual ? 'bg-[#0f4c81] text-white' : 'bg-white text-[#0f4c81]'}`}
+              className={`px-4 py-2 text-sm font-medium rounded-l-lg bg-[#0f4c81] text-white`}
+              // onClick={() => setIsAnnual(false)}
             >
               Mensual
             </button>
             <button
               type="button"
-              className={`px-4 py-2 text-sm font-medium rounded-r-lg ${isAnnual ? 'bg-[#0f4c81] text-white' : 'bg-white text-[#0f4c81]'}`}
-              onClick={() => setIsAnnual(true)}
+              className={`px-4 py-2 text-sm font-medium rounded-l-lg`}
+              // className={`px-4 py-2 text-sm font-medium rounded-r-lg ${isAnnual ? 'bg-[#0f4c81] text-white' : 'bg-white text-[#0f4c81]'}`}
+              // onClick={() => setIsAnnual(true)}
             >
               Anual
             </button>
@@ -56,7 +60,8 @@ export default function Pricing() {
             <CardHeader>
               <CardTitle className="text-center">
                 <span className="text-2xl font-bold">Premium</span>
-                <p className="text-4xl font-bold mt-2">${isAnnual ? '1000' : '100'}<span className="text-base font-normal">{isAnnual ? '/año' : '/mes'}</span></p>
+                {/* <p className="text-4xl font-bold mt-2">${isAnnual ? '1000' : '100'}<span className="text-base font-normal">{isAnnual ? '/año' : '/mes'}</span></p> */}
+                <p className="text-4xl font-bold mt-2">$1000<span className="text-base font-normal">/año</span></p>
               </CardTitle>
             </CardHeader>
             <CardContent>

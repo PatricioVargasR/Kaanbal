@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Lightbulb, Award, Zap, Users } from 'lucide-react'
+import { Metadata } from 'next'
 
+export const metadata: Metadata = {
+  title: 'Acerca de Nosotros',
+};
 export default function AboutUs() {
   return (
       <main className="container mx-auto px-4 py-8">
