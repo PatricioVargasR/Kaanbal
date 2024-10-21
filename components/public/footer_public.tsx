@@ -8,7 +8,6 @@ const links = [
   { name: "Code challange", href: "https://code-challenge-and-quiz.vercel.app/" }
 ]
 
-
 export default function FooterPublic() {
     return(
         <footer className="bg-[#0f4c81] text-white p-8">
