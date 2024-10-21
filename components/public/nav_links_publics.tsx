@@ -30,7 +30,6 @@ export default function NavLinksPublic() {
                     )}>{link.name}</Link>
                 )
             })}
-
         </>
     )
 }
