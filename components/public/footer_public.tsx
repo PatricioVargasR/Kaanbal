@@ -22,7 +22,7 @@ export default function FooterPublic() {
               alt="Logo de Kaanbal"
             />
             {/* <img src="/placeholder.svg?height=40&width=40" alt="Kaanbal logo" className="h-10 w-10 mb-2" /> */}
-            <p>Nuestra misión es proporcionar una educación gratuita de primera clase en cualquier lugar.</p>
+            <p>Nuestra misión es proporcionar una educación<br /> gratuita de primera clase en cualquier lugar.</p>
           </div>
           <div className="flex space-x-4">
             {links.map((link) => {
