@@ -126,6 +126,7 @@ CREATE TABLE IF NOT EXISTS Carpetas (
     nombre_carpeta TEXT NOT NULL,
     curso_id INTEGER REFERENCES Cursos(id_curso) ON DELETE CASCADE,
     usuario_id INTEGER REFERENCES Usuarios(id_usuario) ON DELETE CASCADE
+    nota_id INTEGER REFERENCES Notas(id_nota) ON DELETE CASCADE
 );
 
 -- Tabla de Logros

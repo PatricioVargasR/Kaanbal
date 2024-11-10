@@ -128,10 +128,11 @@
 
 | No. | Campos                | Tipo        | Restricciones                                |
 |-----|-----------------------|-------------|----------------------------------------------|
-| 1.  | id_carpeta            | int         | Primary key, no nulo             |
+| 1.  | id_carpeta            | int         | Primary key, no nulo                         |
 | 2.  | nombre_carpeta        | text        | no nulo                                      |
 | 3.  | curso_id              | int         | Foreign key -> Cursos(id_curso), no nulo     |
 | 4.  | usuario_id            | int         | Foreign key -> Usuarios(id_usuario), no nulo |
+| 5.  | nota_id               | int         | Foreing key -> Notas(id_nota), nulo          |
 
 ### 1t. Tabla `Criterio`
 
