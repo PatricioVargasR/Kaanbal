@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS Logros (
     id_logro SERIAL PRIMARY KEY,
     nombre_logro TEXT NOT NULL,
     descripcion TEXT NOT NULL,
-    criterio JSON NOT NULL
+    criterio_id INTEGER REFERENCES Criterio(id_criterio) ON DELETE CASCADE
 );
 
 -- Tabla de Progreso de Logros
@@ -150,4 +150,13 @@ CREATE TABLE IF NOT EXISTS Progreso_logros (
     progreso INTEGER NOT NULL,
     estado estado_logro DEFAULT 'en_progreso',
     fecha_completado TIMESTAMPTZ
+);
+
+-- Tabla de Criterio
+DROP TABLE IF EXISTS Criterio;
+
+CREATE TABLE IF NOT EXISTS Criterio(
+    id_criterio SERIAL PRIMARY KEY,
+    cantidad INT NOT NULL,
+    condicion TEXT NOT NULL
 );

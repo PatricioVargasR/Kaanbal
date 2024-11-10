@@ -111,16 +111,7 @@
 | 1.  | id_logro             | int         | Primary key, no nulo  |
 | 2.  | nombre_logro         | text        | no nulo                           |
 | 3.  | descripcion          | text        | no nulo                           |
-| 4.  | criterio             | json        | define las condiciones del logro  |
-
-**Ejemplo de criterio en JSON**:
-```json
-{
-  "tipo": "preguntas_correctas",
-  "cantidad": 10,
-  "condicion": "primera_vez"
-}
-```
+| 4.  | criterio             | int         | Foreign key -> Criterio(id_critero), no nulo  |
 
 ### 13. Tabla `Progreso Logros`
 
@@ -141,3 +132,20 @@
 | 2.  | nombre_carpeta        | text        | no nulo                                      |
 | 3.  | curso_id              | int         | Foreign key -> Cursos(id_curso), no nulo     |
 | 4.  | usuario_id            | int         | Foreign key -> Usuarios(id_usuario), no nulo |
+
+### 1t. Tabla `Criterio`
+
+| No. | Campos                | Tipo        | Restricciones                                |
+|-----|-----------------------|-------------|----------------------------------------------|
+| 1.  | id_criterio           | int         | Primary key, no nulo                         |
+| 2.  | cantidad              | int         | no nulo                                      |
+| 3.  | condicion             | text        | no nulo                                      |
+
+**Ejemplo de criterio**:
+```json
+{
+  "tipo": "preguntas_correctas",
+  "cantidad": 10,
+  "condicion": "primera_vez"
+}
+```
