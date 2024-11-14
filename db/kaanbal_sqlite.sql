@@ -1,13 +1,15 @@
+PRAGMA foreing_keys = ON;
+
 -- Tabla de Usuarios
 DROP TABLE IF EXISTS Usuarios;
 
 CREATE TABLE IF NOT EXISTS Usuarios (
-    id_usuario SERIAL PRIMARY KEY,
+    id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     contrasena TEXT NOT NULL,
-    avatar BYTEA,
-    fecha_registro TIMESTAMPTZ DEFAULT NOW(),
+    avatar BLOB,
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
     proveedor_auth TEXT NOT NULL
 );
 
@@ -15,7 +17,7 @@ CREATE TABLE IF NOT EXISTS Usuarios (
 DROP TABLE IF EXISTS Nivel_educativo;
 
 CREATE TABLE IF NOT EXISTS Nivel_educativo (
-    id_nivel_educativo SERIAL PRIMARY KEY,
+    id_nivel_educativo INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre_nivel TEXT NOT NULL
 );
 
@@ -23,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Nivel_educativo (
 DROP TABLE IF EXISTS Materias;
 
 CREATE TABLE IF NOT EXISTS Materias (
-    id_materia SERIAL PRIMARY KEY,
+    id_materia INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre_materia TEXT NOT NULL,
     nivel_educativo_id INTEGER REFERENCES Nivel_educativo(id_nivel_educativo) ON DELETE CASCADE
 );
@@ -32,7 +34,7 @@ CREATE TABLE IF NOT EXISTS Materias (
 DROP TABLE IF EXISTS Temas;
 
 CREATE TABLE IF NOT EXISTS Temas (
-    id_tema SERIAL PRIMARY KEY,
+    id_tema INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre_tema TEXT NOT NULL,
     materia_id INTEGER REFERENCES Materias(id_materia) ON DELETE CASCADE
 );
@@ -41,31 +43,30 @@ CREATE TABLE IF NOT EXISTS Temas (
 DROP TABLE IF EXISTS Notas;
 
 CREATE TABLE IF NOT EXISTS Notas (
-    id_nota SERIAL PRIMARY KEY,
+    id_nota INTEGER PRIMARY KEY AUTOINCREMENT,
     usuario_id INTEGER REFERENCES Usuarios(id_usuario) ON DELETE CASCADE,
     nombre_archivo TEXT NOT NULL,
-    contenido_pdf BYTEA NOT NULL,
-    fecha_subida TIMESTAMPTZ DEFAULT NOW()
+    contenido_pdf BLOB NOT NULL,
+    fecha_subida DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Tabla de Conversaciones IA
 DROP TABLE IF EXISTS Conversaciones_IA;
 
 CREATE TABLE IF NOT EXISTS Conversaciones_IA (
-    id_conversacion SERIAL PRIMARY KEY,
+    id_conversacion INTEGER PRIMARY KEY AUTOINCREMENT,
     nota_id INTEGER REFERENCES Notas(id_nota) ON DELETE CASCADE,
-    fecha_conversacion TIMESTAMPTZ DEFAULT NOW()
+    fecha_conversacion DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Tabla de Mensajes Conversación
 DROP TABLE IF EXISTS Mensajes_conversacion;
 
-CREATE TYPE tipo_mensaje AS ENUM ('usuario', 'ia');
 
 CREATE TABLE IF NOT EXISTS Mensajes_conversacion (
-    id_mensaje SERIAL PRIMARY KEY,
+    id_mensaje INTEGER PRIMARY KEY AUTOINCREMENT,
     conversacion_id INTEGER REFERENCES Conversaciones_IA(id_conversacion) ON DELETE CASCADE,
-    tipo tipo_mensaje NOT NULL,
+    tipo TEXT CHECK(tipo in ('usuario', 'ia')) NOT NULL,
     contenido TEXT NOT NULL
 );
 
@@ -73,9 +74,9 @@ CREATE TABLE IF NOT EXISTS Mensajes_conversacion (
 DROP TABLE IF EXISTS Cursos;
 
 CREATE TABLE IF NOT EXISTS Cursos (
-    id_curso SERIAL PRIMARY KEY,
+    id_curso INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre_curso TEXT NOT NULL,
-    fecha_creacion TIMESTAMPTZ DEFAULT NOW(),
+    fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
     usuario_id INTEGER REFERENCES Usuarios(id_usuario) ON DELETE CASCADE,
     tema_id INTEGER REFERENCES Temas(id_tema) ON DELETE CASCADE,
     cantidad_preguntas INTEGER NOT NULL
@@ -85,7 +86,7 @@ CREATE TABLE IF NOT EXISTS Cursos (
 DROP TABLE IF EXISTS Explicaciones;
 
 CREATE TABLE IF NOT EXISTS Explicaciones (
-    id_explicacion SERIAL PRIMARY KEY,
+    id_explicacion INTEGER PRIMARY KEY AUTOINCREMENT,
     curso_id INTEGER REFERENCES Cursos(id_curso) ON DELETE CASCADE,
     explicacion TEXT NOT NULL
 );
@@ -93,15 +94,12 @@ CREATE TABLE IF NOT EXISTS Explicaciones (
 -- Tabla de Preguntas
 DROP TABLE IF EXISTS Preguntas;
 
-CREATE TYPE tipo_pregunta AS ENUM ('opcion_multiple', 'completar', 'unir', 'buscar');
-CREATE TYPE dificultad_pregunta AS ENUM ('facil', 'medio', 'dificil');
-
 CREATE TABLE IF NOT EXISTS Preguntas (
-    id_pregunta SERIAL PRIMARY KEY,
+    id_pregunta INTEGER PRIMARY KEY AUTOINCREMENT,
     curso_id INTEGER REFERENCES Cursos(id_curso) ON DELETE CASCADE,
-    conversacion_id INTEGER REFERENCES Conversaciones_IA(id_conversacion) ON DELETE SET NULL,
-    tipo_pregunta tipo_pregunta NOT NULL,
-    dificultad dificultad_pregunta DEFAULT 'medio',
+    conversacion_id INTEGER REFERENCES Conversaciones_IA(id_conversacion) ON DELETE CASCADE,
+    tipo_pregunta TEXT CHECK(tipo_pregunta IN ('opcion_multiple', 'completar', 'unir', 'buscar')) NOT NULL,
+    dificultad TEXT CHECK(dificultad IN ('facil', 'medio', 'dificil')) NOT NULL,
     pregunta TEXT NOT NULL,
     explicacion TEXT NOT NULL,
     completada_primera_vez BOOLEAN DEFAULT false,
@@ -112,7 +110,7 @@ CREATE TABLE IF NOT EXISTS Preguntas (
 DROP TABLE IF EXISTS Opciones;
 
 CREATE TABLE IF NOT EXISTS Opciones (
-    id_opcion SERIAL PRIMARY KEY,
+    id_opcion INTEGER PRIMARY KEY AUTOINCREMENT,
     pregunta_id INTEGER REFERENCES Preguntas(id_pregunta) ON DELETE CASCADE,
     texto_opcion TEXT NOT NULL,
     es_correcta BOOLEAN NOT NULL
@@ -122,10 +120,10 @@ CREATE TABLE IF NOT EXISTS Opciones (
 DROP TABLE IF EXISTS Carpetas;
 
 CREATE TABLE IF NOT EXISTS Carpetas (
-    id_carpeta SERIAL PRIMARY KEY,
+    id_carpeta INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre_carpeta TEXT NOT NULL,
     curso_id INTEGER REFERENCES Cursos(id_curso) ON DELETE CASCADE,
-    usuario_id INTEGER REFERENCES Usuarios(id_usuario) ON DELETE CASCADE
+    usuario_id INTEGER REFERENCES Usuarios(id_usuario) ON DELETE CASCADE,
     nota_id INTEGER REFERENCES Notas(id_nota) ON DELETE CASCADE
 );
 
@@ -133,7 +131,7 @@ CREATE TABLE IF NOT EXISTS Carpetas (
 DROP TABLE IF EXISTS Logros;
 
 CREATE TABLE IF NOT EXISTS Logros (
-    id_logro SERIAL PRIMARY KEY,
+    id_logro INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre_logro TEXT NOT NULL,
     descripcion TEXT NOT NULL,
     criterio_id INTEGER REFERENCES Criterio(id_criterio) ON DELETE CASCADE
@@ -142,22 +140,20 @@ CREATE TABLE IF NOT EXISTS Logros (
 -- Tabla de Progreso de Logros
 DROP TABLE IF EXISTS Progreso_logros;
 
-CREATE TYPE estado_logro AS ENUM ('en_progreso', 'completado');
-
 CREATE TABLE IF NOT EXISTS Progreso_logros (
-    id_progreso SERIAL PRIMARY KEY,
+    id_progreso INTEGER PRIMARY KEY AUTOINCREMENT,
     usuario_id INTEGER REFERENCES Usuarios(id_usuario) ON DELETE CASCADE,
     logro_id INTEGER REFERENCES Logros(id_logro) ON DELETE CASCADE,
     progreso INTEGER NOT NULL,
-    estado estado_logro DEFAULT 'en_progreso',
-    fecha_completado TIMESTAMPTZ
+    estado TEXT CHECK(estado in ('en_progeso', 'completado')) DEFAULT 'en_progreso',
+    fecha_completado DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Tabla de Criterio
 DROP TABLE IF EXISTS Criterio;
 
 CREATE TABLE IF NOT EXISTS Criterio(
-    id_criterio SERIAL PRIMARY KEY,
+    id_criterio INTEGER PRIMARY KEY AUTOINCREMENT,
     cantidad INT NOT NULL,
     condicion TEXT NOT NULL
 );
