@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { obtenerTodosCursos } from "@/lib/utils";
+import { Cursos } from "@prisma/client";
 
 const units = [
   { title: "Algebra Basics", subject: "Mathematics", progress: 75 },
@@ -10,7 +12,9 @@ const units = [
   { title: "Spanish Verbs", subject: "Languages", progress: 60 },
 ]
 
-export default function LibraryPage() {
+export default async function LibraryPage() {
+  const cursos = await obtenerTodosCursos();
+
   return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
@@ -40,19 +44,29 @@ export default function LibraryPage() {
           </Select>
         </div>
 
-        <div className="space-y-4">
-          {units.map((unit, index) => (
+        {cursos.length > 0 ? (
+          <div className="space-y-4">
+          {cursos.map((curso, index) => (
             <Card key={index}>
               <CardHeader>
-                <CardTitle>{unit.title}</CardTitle>
+                <CardTitle>{curso.nombre_curso}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p>Subject: {unit.subject}</p>
-                <p>Progress: {unit.progress}%</p>
+                <p>Cantidad de preguntas: {curso.cantidad_preguntas}</p>
+                {/* Convertir la fecha a cadena de texto */}
+                <p>
+                  Creado:{" "}
+                  {curso.fecha_creacion ?
+                    new Date(curso.fecha_creacion).toLocaleDateString() :
+                    "Fecha no disponible"}
+                </p>
               </CardContent>
             </Card>
           ))}
-        </div>
+          </div>
+        ) : (
+          <p>No hay cursos</p>
+        )}
       </div>
   )
 }
