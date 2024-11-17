@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Carpetas {
+  id_carpeta     Int       @id @default(autoincrement())
+  nombre_carpeta String
+  curso_id       Int?
+  usuario_id     Int?
+  nota_id        Int?
+  Notas          Notas?    @relation(fields: [nota_id], references: [id_nota], onDelete: Cascade, onUpdate: NoAction)
+  Usuarios       Usuarios? @relation(fields: [usuario_id], references: [id_usuario], onDelete: Cascade, onUpdate: NoAction)
+  Cursos         Cursos?   @relation(fields: [curso_id], references: [id_curso], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Conversaciones_IA {
+  id_conversacion       Int                     @id @default(autoincrement())
+  nota_id               Int?
+  fecha_conversacion    DateTime?               @default(now())
+  Notas                 Notas?                  @relation(fields: [nota_id], references: [id_nota], onDelete: Cascade, onUpdate: NoAction)
+  Mensajes_conversacion Mensajes_conversacion[]
+  Preguntas             Preguntas[]
+}
+
+model Criterio {
+  id_criterio Int      @id @default(autoincrement())
+  cantidad    Int
+  condicion   String
+  Logros      Logros[]
+}
+
+model Cursos {
+  id_curso           Int             @id @default(autoincrement())
+  nombre_curso       String
+  fecha_creacion     DateTime?       @default(now())
+  usuario_id         Int?
+  tema_id            Int?
+  cantidad_preguntas Int
+  Carpetas           Carpetas[]
+  Temas              Temas?          @relation(fields: [tema_id], references: [id_tema], onDelete: Cascade, onUpdate: NoAction)
+  Usuarios           Usuarios?       @relation(fields: [usuario_id], references: [id_usuario], onDelete: Cascade, onUpdate: NoAction)
+  Explicaciones      Explicaciones[]
+  Preguntas          Preguntas[]
+}
+
+model Explicaciones {
+  id_explicacion Int     @id @default(autoincrement())
+  curso_id       Int?
+  explicacion    String
+  Cursos         Cursos? @relation(fields: [curso_id], references: [id_curso], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Logros {
+  id_logro        Int               @id @default(autoincrement())
+  nombre_logro    String
+  descripcion     String
+  criterio_id     Int?
+  Criterio        Criterio?         @relation(fields: [criterio_id], references: [id_criterio], onDelete: Cascade, onUpdate: NoAction)
+  Progreso_logros Progreso_logros[]
+}
+
+model Materias {
+  id_materia         Int              @id @default(autoincrement())
+  nombre_materia     String
+  nivel_educativo_id Int?
+  Nivel_educativo    Nivel_educativo? @relation(fields: [nivel_educativo_id], references: [id_nivel_educativo], onDelete: Cascade, onUpdate: NoAction)
+  Temas              Temas[]
+}
+
+model Mensajes_conversacion {
+  id_mensaje        Int                @id @default(autoincrement())
+  conversacion_id   Int?
+  tipo              String
+  contenido         String
+  Conversaciones_IA Conversaciones_IA? @relation(fields: [conversacion_id], references: [id_conversacion], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Nivel_educativo {
+  id_nivel_educativo Int        @id @default(autoincrement())
+  nombre_nivel       String
+  Materias           Materias[]
+}
+
+model Notas {
+  id_nota           Int                 @id @default(autoincrement())
+  usuario_id        Int?
+  nombre_archivo    String
+  contenido_pdf     Bytes
+  fecha_subida      DateTime?           @default(now())
+  Carpetas          Carpetas[]
+  Conversaciones_IA Conversaciones_IA[]
+  Usuarios          Usuarios?           @relation(fields: [usuario_id], references: [id_usuario], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Opciones {
+  id_opcion    Int        @id @default(autoincrement())
+  pregunta_id  Int?
+  texto_opcion String
+  es_correcta  Boolean
+  Preguntas    Preguntas? @relation(fields: [pregunta_id], references: [id_pregunta], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Preguntas {
+  id_pregunta            Int                @id @default(autoincrement())
+  curso_id               Int?
+  conversacion_id        Int?
+  tipo_pregunta          String
+  dificultad             String
+  pregunta               String
+  explicacion            String
+  completada_primera_vez Boolean?           @default(false)
+  completada             Boolean?           @default(false)
+  Opciones               Opciones[]
+  Conversaciones_IA      Conversaciones_IA? @relation(fields: [conversacion_id], references: [id_conversacion], onDelete: Cascade, onUpdate: NoAction)
+  Cursos                 Cursos?            @relation(fields: [curso_id], references: [id_curso], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Progreso_logros {
+  id_progreso      Int       @id @default(autoincrement())
+  usuario_id       Int?
+  logro_id         Int?
+  progreso         Int
+  estado           String?   @default("en_progreso")
+  fecha_completado DateTime? @default(now())
+  Logros           Logros?   @relation(fields: [logro_id], references: [id_logro], onDelete: Cascade, onUpdate: NoAction)
+  Usuarios         Usuarios? @relation(fields: [usuario_id], references: [id_usuario], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Temas {
+  id_tema     Int       @id @default(autoincrement())
+  nombre_tema String
+  materia_id  Int?
+  Cursos      Cursos[]
+  Materias    Materias? @relation(fields: [materia_id], references: [id_materia], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model Usuarios {
+  id_usuario      Int               @id @default(autoincrement())
+  nombre          String
+  email           String            @unique(map: "sqlite_autoindex_Usuarios_1")
+  contrasena      String
+  avatar          Bytes?
+  fecha_registro  DateTime?         @default(now())
+  proveedor_auth  String
+  Carpetas        Carpetas[]
+  Cursos          Cursos[]
+  Notas           Notas[]
+  Progreso_logros Progreso_logros[]
+}
