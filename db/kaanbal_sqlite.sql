@@ -145,7 +145,7 @@ CREATE TABLE IF NOT EXISTS Progreso_logros (
     usuario_id INTEGER REFERENCES Usuarios(id_usuario) ON DELETE CASCADE,
     logro_id INTEGER REFERENCES Logros(id_logro) ON DELETE CASCADE,
     progreso INTEGER NOT NULL,
-    estado TEXT CHECK(estado in ('en_progeso', 'completado')) DEFAULT 'en_progreso',
+    estado TEXT CHECK(estado in ('en_progreso', 'completado')) DEFAULT 'en_progreso',
     fecha_completado DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
