@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import NavLinksPublic from "@/components/public/nav_links_publics"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Menu } from 'lucide-react'
+import Link from "next/link"
 
 export function HeaderPublic() {
   return (
@@ -23,9 +24,11 @@ export function HeaderPublic() {
       <nav className="hidden md:flex space-x-4">
         <NavLinksPublic />
       </nav>
-      <Button className="hidden md:block bg-[#0f4c81] text-white hover:bg-[#0f4c81]/90">
-        Iniciar ahora
-      </Button>
+      <Link href="/login" passHref>
+        <Button className="hidden md:block bg-[#0f4c81] text-white hover:bg-[#0f4c81]/90">
+          Iniciar ahora
+        </Button>
+      </Link>
 
       {/* Navegación en el télefono */}
       <Sheet>
@@ -38,9 +41,11 @@ export function HeaderPublic() {
         <SheetContent side="right" className="w-[300px] sm:w-[400px]">
           <nav className="flex flex-col space-y-4 mt-4">
             <NavLinksPublic />
-            <Button className="bg-[#0f4c81] text-white hover:bg-[#0f4c81]/90 w-full">
-              Iniciar ahora
-            </Button>
+            <Link href="/login" passHref>
+              <Button className="bg-[#0f4c81] text-white hover:bg-[#0f4c81]/90 w-full">
+                Iniciar ahora
+              </Button>
+            </Link>
           </nav>
         </SheetContent>
       </Sheet>

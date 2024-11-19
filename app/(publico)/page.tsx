@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, BookOpen, CheckCircle, BarChart2, Zap, HeadphonesIcon, Brain } from 'lucide-react'
+import Link from "next/link";
 
 export default function Main() {
   return (
@@ -11,7 +12,9 @@ export default function Main() {
             <h1 className="text-4xl font-bold mb-4">Revoluciona tu forma de estudiar con esta herramienta de IA</h1>
             <p className="mb-6">Genera contenido educativo dinámico y personalizado de manera sencilla. Ya sea que necesites ejercicios, resúmenes o evaluaciones, nuestra plataforma lo adapta a tus necesidades.</p>
             <div className="space-x-4">
-              <Button className="bg-[#0f4c81] text-white hover:bg-[#0f4c81]/90">Inicia gratis</Button>
+              <Link href="login" passHref>
+                <Button className="bg-[#0f4c81] text-white hover:bg-[#0f4c81]/90">Inicia gratis</Button>
+              </Link>
               <Button variant="outline" className="border-[#0f4c81] text-[#0f4c81]">Ver planes</Button>
             </div>
           </div>
