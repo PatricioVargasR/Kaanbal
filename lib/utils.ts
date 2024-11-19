@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { prisma } from "./prisma"
-import { Cursos } from "@prisma/client"
+import { Cursos, Usuarios } from "@prisma/client"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -13,3 +13,29 @@ export async function obtenerTodosCursos() {
 
   return cursos
 }
+
+// Función para obtener un usuario
+export async function obtenerUnUsuario(email?: string) {
+
+  const usuario = await prisma.usuarios.findUnique({
+    where: {
+      email: email
+    }
+  })
+
+  return usuario
+}
+
+// Función para agregar un usuario
+export async function crearUnUsuario(data: Usuarios) {
+
+  const nuevoUsuario = await prisma.usuarios.create({
+    data: {
+      nombre: data.nombre,
+      email: data.email,
+      contrasena: data.contrasena,
+    }
+  })
+
+  return nuevoUsuario
+};
