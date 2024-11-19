@@ -146,7 +146,6 @@ model Usuarios {
   contrasena      String
   avatar          Bytes?
   fecha_registro  DateTime?         @default(now())
-  proveedor_auth  String
   Carpetas        Carpetas[]
   Cursos          Cursos[]
   Notas           Notas[]

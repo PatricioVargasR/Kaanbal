@@ -1,7 +1,7 @@
 -- Insertar Usuarios
-INSERT INTO Usuarios (nombre, email, contrasena, proveedor_auth) VALUES
-  ('Juan Pérez', 'juan.perez@example.com', 'hashed_password', 'google'),
-  ('María García', 'maria.garcia@example.com', 'hashed_password', 'github');
+INSERT INTO Usuarios (nombre, email, contrasena) VALUES
+  ('Juan Pérez', 'juan.perez@example.com', 'hashed_password'),
+  ('María García', 'maria.garcia@example.com', 'hashed_password');
 
 -- Insertar Niveles Educativos
 INSERT INTO Nivel_educativo (nombre_nivel) VALUES
