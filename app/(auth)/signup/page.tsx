@@ -4,11 +4,11 @@ import Link from 'next/link'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from '@/hooks/use-toast' // Asegúrate de tener esta utilidad
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
 import SignUpButtons from '@/components/user/signupButtons'
+import { useLoading } from '@/components/user/LoadingContext'
 
 // export const metadata: Metadata = {
 //   title: 'Inicia sesión'
@@ -19,10 +19,11 @@ export default function SignUp() {
   const { register, handleSubmit, formState: { errors } } = useForm()
   const { toast } = useToast()
 
-  const [isLoading, setIsLoading] = useState(false)
+  const { isLoading, setLoading } = useLoading()
+
 
   const onSubmit = async (data: any) => {
-    setIsLoading(true)
+    setLoading(true)
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
@@ -38,7 +39,7 @@ export default function SignUp() {
           description: 'Tu cuenta ha sido creada correctamente.',
           variant: 'default',
         })
-        window.location.href = '/login'
+        window.location.href = '/dashboard'
       } else {
         toast({
           title: 'Error en el registro',
@@ -53,7 +54,7 @@ export default function SignUp() {
         variant: 'destructive',
       })
     } finally {
-      setIsLoading(false)
+      setLoading(false)
     }
   }
 
