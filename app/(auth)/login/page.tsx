@@ -2,8 +2,9 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Metadata } from 'next'
+import SignInButtons from '@/components/user/signInButtons'
 
 export const metadata: Metadata = {
   title: 'Registrate'
@@ -34,13 +35,7 @@ export default function Login() {
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <Button variant="outline" className="w-full">Inicia sesión con Google</Button>
-          <Button variant="outline" className="w-full">Inicia sesión con GitHub</Button>
-          <p className="text-xs text-center text-gray-500">
-            Al registrarte, aceptas nuestros Términos de Servicio y Política de Privacidad.
-          </p>
-        </CardFooter>
+        <SignInButtons />
       </Card>
     </div>
   )

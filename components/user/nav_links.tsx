@@ -1,7 +1,11 @@
+'use client'
+import { signOut } from "next-auth/react"
+import { LogOut } from "lucide-react"
 import Link from "next/link"
 import { Home, Library, Bell, MessageSquare, User, MoreHorizontal } from 'lucide-react'
 
 export default function NavLinks() {
+
     return(
         <nav className="space-y-4">
             <Link href="/" className="flex items-center space-x-2 text-[#0f4c81] font-bold">
@@ -27,10 +31,19 @@ export default function NavLinks() {
             <   User size={20} />
                 <span>Perfil</span>
             </Link>
-            <Link href="/mas" className="flex items-center space-x-2">
-                <MoreHorizontal size={20} />
-                <span>Más</span>
-            </Link>
+            <button
+                onClick={() => {
+                    signOut({
+                        callbackUrl: "/",
+                    })
+                }}
+                className="flex items-center space-x-2 w-full text-left hover:text-[#0f4c81] transition-colors focus:outline-none"
+            >
+                <LogOut size={20}/>
+                <span>
+                    Cerrar sesión
+                </span>
+            </button>
         </nav>
     )
 }
