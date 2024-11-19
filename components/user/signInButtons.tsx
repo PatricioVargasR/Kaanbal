@@ -8,12 +8,14 @@ import { Loader2 } from 'lucide-react'
 
 export default function SignInButtons() {
     const [isLoading, setIsLoading] = useState({
-        github: false
+        github: false,
+        google: false
     })
 
-    const handleSignIn = async (provider: 'github') => {
+    const handleSignIn = async (provider: 'github' | 'google') => {
 
-        if (isLoading.github) return
+        if (isLoading.github || isLoading.google) return
+
         setIsLoading(prev => ({ ...prev, [provider]: true}))
         try {
             await signIn(provider, {
@@ -32,7 +34,7 @@ export default function SignInButtons() {
                 variant="outline"
                 className="w-full"
                 onClick={() => handleSignIn('github')}
-                disabled={isLoading.github}
+                disabled={isLoading.github || isLoading.google}
                 >
                     {isLoading.github ? (
                         <>
@@ -43,7 +45,21 @@ export default function SignInButtons() {
                         'Inicia sesión con Github'
                     )}
             </Button>
-            <Button variant="outline" className="w-full">Inicia sesión con Google</Button>
+            <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => handleSignIn('google')}
+                disabled={isLoading.github || isLoading.google}
+                >
+                    {isLoading.google ? (
+                        <>
+                            <Loader2 className='mr-2 h4 w-4 animate-spin' />
+                            Iniciando sesión...
+                        </>
+                    ) : (
+                        'Inicia sesión con Google'
+                    )}
+            </Button>
             <p className="text-xs text-center text-gray-500">
             Al registrarte, aceptas nuestros Términos de Servicio y Política de Privacidad.
             </p>
