@@ -10,15 +10,16 @@ import { useForm } from 'react-hook-form'
 import SignInButtons from '@/components/user/signInButtons'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
+import { useLoading } from '@/components/user/LoadingContext'
 
 // TODO: Crear un estado global para manejar el inicio de sesión
 export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm()
   const { toast } = useToast()
-  const [isLoading, setIsLoading] = useState(false)
+  const { isLoading, setLoading } = useLoading()
 
   const onSubmit = async (data: any) => {
-    setIsLoading(true)
+    setLoading(true)
     try {
       const res = await signIn('credentials', {
         email: data.email,
@@ -44,7 +45,7 @@ export default function Login() {
         variant: 'destructive',
       })
     } finally {
-      setIsLoading(false)
+      setLoading(false)
     }
   }
 

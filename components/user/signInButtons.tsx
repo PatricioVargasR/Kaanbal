@@ -5,18 +5,16 @@ import { Button } from "@/components/ui/button"
 import { CardFooter } from "@/components/ui/card"
 import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
+import { useLoading } from './LoadingContext'
 
 export default function SignInButtons() {
-    const [isLoading, setIsLoading] = useState({
-        github: false,
-        google: false
-    })
+    const { isLoading, setLoading } = useLoading()
 
     const handleSignIn = async (provider: 'github' | 'google') => {
 
-        if (isLoading.github || isLoading.google) return
+        if (isLoading) return
 
-        setIsLoading(prev => ({ ...prev, [provider]: true}))
+        setLoading(true)
         try {
             await signIn(provider, {
                 callbackUrl: '/dashboard',
@@ -25,7 +23,7 @@ export default function SignInButtons() {
         } catch (error) {
             console.error(`Ocurrió un error al iniciar sesión ${provider}:`, error)
         } finally {
-            setIsLoading(prev => ({ ...prev, [provider]: false }))
+            setLoading(false)
         }
     }
     return(
@@ -34,9 +32,9 @@ export default function SignInButtons() {
                 variant="outline"
                 className="w-full"
                 onClick={() => handleSignIn('github')}
-                disabled={isLoading.github || isLoading.google}
+                disabled={isLoading}
                 >
-                    {isLoading.github ? (
+                    {isLoading ? (
                         <>
                             <Loader2 className='mr-2 h4 w-4 animate-spin' />
                             Iniciando sesión...
@@ -49,9 +47,9 @@ export default function SignInButtons() {
                 variant="outline"
                 className="w-full"
                 onClick={() => handleSignIn('google')}
-                disabled={isLoading.github || isLoading.google}
+                disabled={isLoading}
                 >
-                    {isLoading.google ? (
+                    {isLoading ? (
                         <>
                             <Loader2 className='mr-2 h4 w-4 animate-spin' />
                             Iniciando sesión...
