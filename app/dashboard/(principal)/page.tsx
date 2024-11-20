@@ -45,7 +45,7 @@ export default function LearningPage() {
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#0f4c81]">Temas Populares</h2>
           <div className="flex overflow-x-auto space-x-4 pb-4 snap-x snap-mandatory">
             {popularTopics.map((topic, index) => (
-              <Card key={index} className="flex-shrink-0 w-40 snap-center">
+              <Card key={index} className="flex-shrink-0 w-35 snap-center">
                 <CardHeader>
                   <CardTitle className="text-center">{topic.icon}</CardTitle>
                 </CardHeader>
