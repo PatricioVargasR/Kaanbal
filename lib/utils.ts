@@ -27,15 +27,18 @@ export async function obtenerUnUsuario(email?: string) {
 }
 
 // Función para agregar un usuario
-export async function crearUnUsuario(data: Usuarios) {
+export async function crearUnUsuario(data: any) {
 
   const nuevoUsuario = await prisma.usuarios.create({
     data: {
       nombre: data.nombre,
       email: data.email,
       contrasena: data.contrasena,
+      imagen_usuario: data.imagen_usuario ? data.imagen_usuario : null,
+      proveedor_auth: data.proveedor_auth ? data.proveedor_auth : 'credentials'
     }
   })
 
   return nuevoUsuario
 };
+

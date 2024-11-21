@@ -21,6 +21,7 @@ export default function Login() {
   const onSubmit = async (data: any) => {
     setLoading(true)
     try {
+
       const res = await signIn('credentials', {
         email: data.email,
         contrasena: data.contrasena,
