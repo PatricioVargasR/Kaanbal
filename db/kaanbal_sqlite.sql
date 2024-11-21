@@ -7,8 +7,9 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
-    contrasena TEXT NOT NULL,
+    contrasena TEXT,
     avatar BLOB,
+    imagen_usuario TEXT,
     fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
     proveedor_auth TEXT
 );
