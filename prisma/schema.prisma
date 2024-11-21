@@ -143,9 +143,11 @@ model Usuarios {
   id_usuario      Int               @id @default(autoincrement())
   nombre          String
   email           String            @unique(map: "sqlite_autoindex_Usuarios_1")
-  contrasena      String
+  contrasena      String?
   avatar          Bytes?
+  imagen_usuario  String?
   fecha_registro  DateTime?         @default(now())
+  proveedor_auth  String?
   Carpetas        Carpetas[]
   Cursos          Cursos[]
   Notas           Notas[]
