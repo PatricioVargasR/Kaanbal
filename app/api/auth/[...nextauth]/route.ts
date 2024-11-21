@@ -2,7 +2,8 @@ import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider  from "next-auth/providers/credentials";
-import { obtenerUnUsuario } from "@/lib/utils";
+import { crearUnUsuario, obtenerUnUsuario } from "@/lib/utils";
+import { Usuarios } from "@prisma/client";
 
 const bcrypt = require('bcrypt');
 
@@ -44,7 +45,7 @@ const handler = NextAuth({
                 const usuarioEncontrado = await obtenerUnUsuario(credentials.email);
 
                 // Verificar que exista
-                if (!usuarioEncontrado) throw new Error('No se eoncotró el usaurio');
+                if (!usuarioEncontrado) throw new Error('No se encontró el usuario');
 
                 // Verificar la contraseña
                 const esContrasenaValida = await bcrypt.compare(credentials.contrasena, usuarioEncontrado.contrasena)
@@ -58,6 +59,34 @@ const handler = NextAuth({
             }
         })
     ],
+
+    callbacks: {
+        async signIn({ user, account }) {
+
+            // Buscar el usuario por el email
+            const encontrarUsuario = await obtenerUnUsuario(user.email?.toString())
+
+            // Verificar que no exista
+            if (!encontrarUsuario) {
+
+                // Creamos un mapa del usuario
+                const usuario = {
+                    nombre: user.name?.toString(),
+                    email: user.email?.toString(),
+                    imagen_usuario: user.image?.toString(),
+                    proveedor_auth: account?.provider?.toString()
+                }
+
+                // Se crea un usuario
+                const usuarioCreado = await crearUnUsuario(usuario)
+
+                // Verificar que se haya creado el usuario correctamente
+                if (!usuarioCreado.id_usuario) throw new Error('Ocurrió un error al registrarse')
+
+            }
+            return true
+        }
+    },
 
     // Define el tipo de sesión
     session: {
