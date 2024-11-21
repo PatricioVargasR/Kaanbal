@@ -19,7 +19,7 @@ export default function SignUpButtons() {
 
         try {
             await signIn(provider, {
-                callbackUrl: '/login',
+                callbackUrl: '/dashboard',
                 redirect: false
             })
         } catch (error) {
