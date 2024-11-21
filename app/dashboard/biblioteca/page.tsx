@@ -5,11 +5,11 @@ import { obtenerTodosCursos } from "@/lib/utils";
 import { Cursos } from "@prisma/client";
 
 const units = [
-  { title: "Algebra Basics", subject: "Mathematics", progress: 75 },
-  { title: "Chemical Reactions", subject: "Science", progress: 50 },
-  { title: "Shakespeare's Plays", subject: "Literature", progress: 30 },
-  { title: "World War II", subject: "History", progress: 90 },
-  { title: "Spanish Verbs", subject: "Languages", progress: 60 },
+  { title: "Algebra Basica", subject: "Matematicas", progress: 75 },
+  { title: "Reacciones Químicas", subject: "Ciencia", progress: 50 },
+  { title: "Obras de Shakespeare", subject: "Literatura", progress: 30 },
+  { title: "Segunda Guerra Mundial", subject: "Historia", progress: 90 },
+  { title: "Verbos de Español", subject: "Languajes", progress: 60 },
 ]
 
 export default async function LibraryPage() {
@@ -18,28 +18,28 @@ export default async function LibraryPage() {
   return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-[#0f4c81]">Library</h1>
+          <h1 className="text-3xl font-bold text-[#0f4c81]">Biblioteca</h1>
           <Select>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="View" />
+              <SelectValue placeholder="Ver" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="units">Units</SelectItem>
-              <SelectItem value="folders">Folders</SelectItem>
+              <SelectItem value="units">Unidades</SelectItem>
+              <SelectItem value="folders">Carpetas</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div className="flex space-x-4">
-          <Input type="search" placeholder="Search units..." className="max-w-sm" />
+          <Input type="search" placeholder="Buscar Unidad..." className="max-w-sm" />
           <Select>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter" />
+              <SelectValue placeholder="Filtro" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="recent">Recent</SelectItem>
-              <SelectItem value="progress">In Progress</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="recent">Recientes</SelectItem>
+              <SelectItem value="progress">En progreso</SelectItem>
+              <SelectItem value="completed">Completado</SelectItem>
             </SelectContent>
           </Select>
         </div>

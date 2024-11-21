@@ -14,7 +14,7 @@ export default function ConversationPage() {
   return (
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-[#0f4c81]">Conversation: Science Lab Report</h1>
+          <h1 className="text-3xl font-bold text-[#0f4c81]">Conversación: Reporte de Laboratorio de Química</h1>
           <Button variant="outline" size="icon">
             <Trash2 className="h-4 w-4" />
           </Button>
@@ -38,17 +38,17 @@ export default function ConversationPage() {
 
           <Card className="h-[calc(100vh-200px)] overflow-y-auto">
             <CardHeader>
-              <CardTitle>Document</CardTitle>
+              <CardTitle>Documento</CardTitle>
             </CardHeader>
             <CardContent>
-              <p>This is where the content of your document would be displayed. You can select text here to ask questions about specific parts of the document.</p>
+              <p>Aquí es donde se mostraría el contenido de su documento. Puede seleccionar texto aquí para hacer preguntas sobre partes específicas del documento.</p>
             </CardContent>
           </Card>
         </div>
 
         <div className="flex space-x-2">
           <Input placeholder="Ask a question..." className="flex-grow" />
-          <Button className="bg-[#0f4c81] hover:bg-[#98bee0]">Send</Button>
+          <Button className="bg-[#0f4c81] hover:bg-[#98bee0]">Enviar</Button>
         </div>
       </div>
   )
