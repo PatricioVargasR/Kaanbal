@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     email TEXT NOT NULL UNIQUE,
     contrasena TEXT NOT NULL,
     avatar BLOB,
-    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
+    fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
+    proveedor_auth TEXT
 );
 
 -- Tabla de Nivel Educativo
