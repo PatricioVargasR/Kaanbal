@@ -1,9 +1,8 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { prisma } from "./prisma"
-import { Cursos } from "@prisma/client"
+import { Cursos, Logros } from "@prisma/client"
 import { getServerSession } from "next-auth";
-import { Session } from "inspector/promises";
 
 // Función para obtener la sesión
 export async function obtenerSesion() {
@@ -72,4 +71,52 @@ export async function obtenerIdUsuario() {
 
   // Regresamos el id_usuario
   return usuario?.id_usuario
+}
+
+// Función que obtiene todos los logros del usuario
+export async function obtenreProgresoLogros(id_usuario: any) {
+
+  // Obtiene todos los logros
+  const logros = await prisma.logros.findMany({
+    include: {
+      Progreso_logros: {
+        where: {
+          usuario_id: id_usuario
+        }
+      }
+    }
+  })
+
+  return logros
+}
+
+// Obtener cantidad de cursos de un usuario
+export async function obtenerCantidadCursos(id_usuario: any) {
+
+  // Obtener todos los cursos de un usuario
+  const cursos: Cursos[] = await prisma.cursos.findMany({
+    where: {
+      usuario_id: id_usuario
+    }
+  })
+
+  return cursos.length
+}
+
+// Obtener todos las preguntas de un curso
+export async function obtenerCantidadPreguntas(id_usuario: any) {
+
+  // Obtener todas las preguntas de los cursos
+  const preguntas = await prisma.preguntas.findMany({
+    include: {
+      Cursos: {
+        where: {
+          usuario_id: id_usuario
+        }
+      }
+    }
+  })
+
+  // Regresar la cantidad total
+  return preguntas.length
 }
