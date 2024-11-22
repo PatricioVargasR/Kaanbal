@@ -1,15 +1,31 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { prisma } from "./prisma"
-import { Cursos, Usuarios } from "@prisma/client"
+import { Cursos } from "@prisma/client"
+import { getServerSession } from "next-auth";
+import { Session } from "inspector/promises";
+
+// Función para obtener la sesión
+export async function obtenerSesion() {
+
+    // Utilizando getServerSession obtiene la sesión iniciada
+    const sesion = await getServerSession()
+    return sesion;
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
 // Función para obtener todos los cursos
-export async function obtenerTodosCursos() {
-  const cursos: Cursos[] = await prisma.cursos.findMany();
+export async function obtenerTodosCursos(id_usuario: any) {
+
+  // Obtiene todos los cursos de un usuario
+  const cursos: Cursos[] = await prisma.cursos.findMany({
+    where: {
+      usuario_id: id_usuario
+    }
+  });
 
   return cursos
 }
@@ -42,3 +58,18 @@ export async function crearUnUsuario(data: any) {
   return nuevoUsuario
 };
 
+// Función para extrear el id_usuario de la sesión
+export async function obtenerIdUsuario() {
+
+  // Obtener la sesión
+  const sesion = await obtenerSesion()
+
+  // Obtenemos el email del usuario de la sesión
+  const email = sesion?.user?.email
+
+  // Obtenemos el usuario en base al email
+  const usuario = await obtenerUnUsuario(email?.toString())
+
+  // Regresamos el id_usuario
+  return usuario?.id_usuario
+}
