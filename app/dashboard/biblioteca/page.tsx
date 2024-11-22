@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { obtenerTodosCursos } from "@/lib/utils";
+import { obtenerIdUsuario, obtenerTodosCursos } from "@/lib/utils";
 import { Cursos } from "@prisma/client";
 
 const units = [
@@ -13,7 +13,12 @@ const units = [
 ]
 
 export default async function LibraryPage() {
-  const cursos = await obtenerTodosCursos();
+
+  // Obtiene el id_usuario de la sesión
+  const id_usuario = await obtenerIdUsuario();
+
+  // Obtiene todos los cursos del usuario
+  const cursos = await obtenerTodosCursos(id_usuario);
 
   return (
       <div className="space-y-6">
