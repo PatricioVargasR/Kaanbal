@@ -1,7 +1,7 @@
 -- Insertar Usuarios
-INSERT INTO Usuarios (nombre, email, contrasena) VALUES
-  ('Juan Pérez', 'juan.perez@example.com', 'hashed_password'),
-  ('María García', 'maria.garcia@example.com', 'hashed_password');
+INSERT INTO Usuarios (nombre, email, edad,  contrasena) VALUES
+  ('Juan Pérez', 'juan.perez@example.com', '10',  'hashed_password'),
+  ('María García', 'maria.garcia@example.com', '20', 'hashed_password');
 
 -- Insertar Niveles Educativos
 INSERT INTO Nivel_educativo (nombre_nivel) VALUES
@@ -64,9 +64,9 @@ INSERT INTO Criterio (cantidad, condicion) VALUES
   (10, 'Completado 10 preguntas correctas');
 
 -- Insertar Logros
-INSERT INTO Logros (nombre_logro, descripcion, criterio_id) VALUES
-  ('Logro de Álgebra', 'Completaste el curso de Álgebra Básica.', 1),
-  ('Logro de Física', 'Completaste el curso de Física Avanzada.', 2);
+INSERT INTO Logros (nombre_logro, icono_logro,  descripcion, criterio_id) VALUES
+  ('Logro de Álgebra', 'Zap', 'Completaste el curso de Álgebra Básica.', 1),
+  ('Logro de Física', 'Star', 'Completaste el curso de Física Avanzada.', 2);
 
 -- Insertar Progreso de Logros
 INSERT INTO Progreso_logros (usuario_id, logro_id, progreso, estado) VALUES

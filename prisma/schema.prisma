@@ -58,6 +58,7 @@ model Explicaciones {
 model Logros {
   id_logro        Int               @id @default(autoincrement())
   nombre_logro    String
+  icono_logro     String
   descripcion     String
   criterio_id     Int?
   Criterio        Criterio?         @relation(fields: [criterio_id], references: [id_criterio], onDelete: Cascade, onUpdate: NoAction)
@@ -142,6 +143,7 @@ model Temas {
 model Usuarios {
   id_usuario      Int               @id @default(autoincrement())
   nombre          String
+  edad            String?
   email           String            @unique(map: "sqlite_autoindex_Usuarios_1")
   contrasena      String?
   avatar          Bytes?

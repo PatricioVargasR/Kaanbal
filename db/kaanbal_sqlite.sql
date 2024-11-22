@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS Usuarios;
 CREATE TABLE IF NOT EXISTS Usuarios (
     id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre TEXT NOT NULL,
+    edad TEXT,
     email TEXT NOT NULL UNIQUE,
     contrasena TEXT,
     avatar BLOB,
@@ -134,6 +135,7 @@ DROP TABLE IF EXISTS Logros;
 CREATE TABLE IF NOT EXISTS Logros (
     id_logro INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre_logro TEXT NOT NULL,
+    icono_logro TEXT NOT NULL,
     descripcion TEXT NOT NULL,
     criterio_id INTEGER REFERENCES Criterio(id_criterio) ON DELETE CASCADE
 );
