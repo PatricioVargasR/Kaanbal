@@ -63,6 +63,11 @@ const handler = NextAuth({
     callbacks: {
         async signIn({ user, account }) {
 
+            // Verificar que el email no sea nulo
+            if (user.email === undefined) {
+                user.email = user.id
+            }
+
             // Buscar el usuario por el email
             const encontrarUsuario = await obtenerUnUsuario(user.email?.toString())
 
