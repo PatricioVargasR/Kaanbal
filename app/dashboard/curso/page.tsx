@@ -9,7 +9,7 @@ const courseData = {
   completedExercises: 12,
   currentQuestion: {
     type: "Multiple Choice",
-    text: "Solve for x: 2x + 5 =   13",
+    text: "Solve for x: 2x + 5 = 13",
   },
 }
 
@@ -21,66 +21,82 @@ const topics = [
 
 export default function CoursePage() {
   return (
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-[#0f4c81]">{courseData.topic}: {courseData.unit}</h1>
-          <p>Progress: {courseData.completedExercises}/{courseData.totalExercises} exercises completed</p>
-          <Progress value={(courseData.completedExercises / courseData.totalExercises) * 100} className="mt-2" />
-        </div>
+    <div className="space-y-6 p-4">
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#0f4c81] break-words">
+          {courseData.topic}: {courseData.unit}
+        </h1>
+        <p className="text-sm sm:text-base mt-2">
+          Progress: {courseData.completedExercises}/{courseData.totalExercises} exercises completed
+        </p>
+        <Progress 
+          value={(courseData.completedExercises / courseData.totalExercises) * 100} 
+          className="mt-2"
+        />
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Total Questions</CardTitle>
-            </CardHeader>
-            <CardContent>{courseData.totalExercises}</CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Completed</CardTitle>
-            </CardHeader>
-            <CardContent>{courseData.completedExercises}</CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Remaining</CardTitle>
-            </CardHeader>
-            <CardContent>{courseData.totalExercises - courseData.completedExercises}</CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Accuracy</CardTitle>
-            </CardHeader>
-            <CardContent>85%</CardContent>
-          </Card>
-        </div>
-
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
-          <CardHeader>
-            <CardTitle>{courseData.currentQuestion.type}</CardTitle>
+          <CardHeader className="p-3 sm:p-6">
+            <CardTitle className="text-sm sm:text-base">Total Questions</CardTitle>
           </CardHeader>
-          <CardContent>
-            <p>{courseData.currentQuestion.text}</p>
-            <div className="mt-4 space-x-4">
-              <Button>Previous</Button>
-              <Button>Next</Button>
-            </div>
+          <CardContent className="p-3 sm:p-6 pt-0 sm:pt-2 text-lg sm:text-xl font-semibold">
+            {courseData.totalExercises}
           </CardContent>
         </Card>
-
-        <div>
-          <h2 className="text-2xl font-bold text-[#0f4c81] mb-4">Topics</h2>
-          {topics.map((topic, index) => (
-            <Card key={index} className="mb-2">
-              <CardContent className="flex justify-between items-center">
-                <span>{topic.name}</span>
-                <span className={topic.status === "in progress" ? "text-[#0f4c81]" : "text-gray-500"}>
-                  {topic.status}
-                </span>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <Card>
+          <CardHeader className="p-3 sm:p-6">
+            <CardTitle className="text-sm sm:text-base">Completed</CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 sm:p-6 pt-0 sm:pt-2 text-lg sm:text-xl font-semibold">
+            {courseData.completedExercises}
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="p-3 sm:p-6">
+            <CardTitle className="text-sm sm:text-base">Remaining</CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 sm:p-6 pt-0 sm:pt-2 text-lg sm:text-xl font-semibold">
+            {courseData.totalExercises - courseData.completedExercises}
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="p-3 sm:p-6">
+            <CardTitle className="text-sm sm:text-base">Accuracy</CardTitle>
+          </CardHeader>
+          <CardContent className="p-3 sm:p-6 pt-0 sm:pt-2 text-lg sm:text-xl font-semibold">
+            85%
+          </CardContent>
+        </Card>
       </div>
+
+      <Card>
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-lg sm:text-xl">{courseData.currentQuestion.type}</CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 sm:p-6 pt-0">
+          <p className="text-sm sm:text-base mb-4">{courseData.currentQuestion.text}</p>
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+            <Button className="w-full sm:w-auto">Previous</Button>
+            <Button className="w-full sm:w-auto">Next</Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div>
+        <h2 className="text-xl sm:text-2xl font-bold text-[#0f4c81] mb-4">Topics</h2>
+        {topics.map((topic, index) => (
+          <Card key={index} className="mb-2">
+            <CardContent className="flex justify-between items-center p-3 sm:p-4">
+              <span className="text-sm sm:text-base">{topic.name}</span>
+              <span className={`text-xs sm:text-sm ${topic.status === "in progress" ? "text-[#0f4c81]" : "text-gray-500"}`}>
+                {topic.status}
+              </span>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
   )
 }
+
