@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button"
 
 export default function CreateUnitPage() {
   return (
-      <Card className="max-w-2xl mx-auto">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center text-[#0f4c81]">Configure and Start</CardTitle>
+    <div className="p-4 sm:p-6 md:p-8">
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader className="p-4 sm:p-6">
+          <CardTitle className="text-xl sm:text-2xl font-bold text-center text-[#0f4c81]">Configure and Start</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 p-4 sm:p-6">
           <Select>
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Select subject" />
             </SelectTrigger>
             <SelectContent>
@@ -23,7 +24,7 @@ export default function CreateUnitPage() {
           </Select>
 
           <Select>
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Select topic" />
             </SelectTrigger>
             <SelectContent>
@@ -34,7 +35,7 @@ export default function CreateUnitPage() {
           </Select>
 
           <Select>
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Number of questions" />
             </SelectTrigger>
             <SelectContent>
@@ -45,7 +46,7 @@ export default function CreateUnitPage() {
           </Select>
 
           <Select>
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Education level" />
             </SelectTrigger>
             <SelectContent>
@@ -54,8 +55,12 @@ export default function CreateUnitPage() {
             </SelectContent>
           </Select>
 
-          <Button className="w-full bg-[#0f4c81] hover:bg-[#98bee0]">Start</Button>
+          <Button className="w-full bg-[#0f4c81] hover:bg-[#98bee0] text-white font-semibold py-2 px-4 rounded transition-colors duration-200">
+            Start
+          </Button>
         </CardContent>
       </Card>
+    </div>
   )
 }
+
