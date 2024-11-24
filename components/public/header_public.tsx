@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import NavLinksPublic from "@/components/public/nav_links_publics"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Menu } from 'lucide-react'
 import Link from "next/link"
 
@@ -39,6 +39,9 @@ export function HeaderPublic() {
           </Button>
         </SheetTrigger>
         <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+          <SheetHeader>
+            <SheetTitle className="hidden">Menú de navegación</SheetTitle>
+          </SheetHeader>
           <nav className="flex flex-col space-y-4 mt-4">
             <NavLinksPublic />
             <Link href="/login" passHref>

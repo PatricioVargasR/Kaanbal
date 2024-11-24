@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Menu } from 'lucide-react'
 import NavLinks from "@/components/user/nav_links";
 
@@ -16,6 +16,9 @@ export default function Aside() {
             </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-64">
+              <SheetHeader>
+                <SheetTitle className="hidden">Menú de navegación</SheetTitle>
+              </SheetHeader>
               <NavLinks />
             </SheetContent>
         </Sheet>
