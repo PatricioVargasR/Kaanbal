@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Lightbulb, Award, Zap, Users } from 'lucide-react'
 import { Metadata } from 'next'
 import Image from "next/image"
+import Link from "next/link"
 
 export const metadata: Metadata = {
   title: 'Acerca de Nosotros',
@@ -29,7 +30,11 @@ export default function AboutUs() {
               <span className="text-yellow-400">★★★★★</span>
               <span className="ml-2 text-sm">Basado en +10,000 reseñas</span>
             </div>
-            <Button className="bg-[#0f4c81] text-white hover:bg-[#0f4c81]/90">Empieza gratis</Button>
+            <Link href="login" passHref>
+							<Button className="bg-[#0f4c81] text-white hover:bg-[#0f4c81]/90">
+								Empieza gratis
+							</Button>
+						</Link>
           </div>
         </div>
         <section className="mb-12">
