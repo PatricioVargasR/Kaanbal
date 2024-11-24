@@ -53,13 +53,13 @@ export default function NavLinks() {
 				<Library size={20} />
 				<span>Tu biblioteca</span>
 			</Link>
-			<Link
+			{/* <Link
 				href="/dashboard/notificaciones"
 				className="flex items-center space-x-2 hover:text-[#0f4c81] transition-colors focus:outline-none"
 			>
 				<Bell size={20} />
 				<span>Notificaciones</span>
-			</Link>
+			</Link> */}
 			<Link
 				href="/dashboard/chat-pdf"
 				className="flex items-center space-x-2 hover:text-[#0f4c81] transition-colors focus:outline-none"
