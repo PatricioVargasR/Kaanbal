@@ -258,9 +258,12 @@ export default function Main() {
 							algo que te agobia.
 						</p>
 					</div>
-					<Button className="mt-4 md:mt-0 bg-[#0f4c81] text-white hover:bg-[#0f4c81]/90">
-						Comenzar gratis
-					</Button>
+					<Link href="login" passHref>
+							<Button className="bg-[#0f4c81] text-white hover:bg-[#0f4c81]/90 mt-4 md:mt-0">
+								Comenzar gratis
+							</Button>
+						</Link>
+
 				</CardContent>
 			</Card>
 		</main>
