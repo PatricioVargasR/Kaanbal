@@ -76,8 +76,6 @@ export default function Main() {
 								className="w-full mb-4"
 								alt="Aprender"
 							/>
-							{/* <img src="/placeholder.svg?height=100&width=150" alt="Aprender" className="w-full mb-4" /> */}
-							{/* <p>Explora nuevos conceptos y temas</p> */}
 						</CardContent>
 					</Card>
 					<Card className="bg-[#c4d8e9]">
@@ -85,11 +83,6 @@ export default function Main() {
 							<CardTitle>Probar</CardTitle>
 						</CardHeader>
 						<CardContent>
-							{/* <div className="flex items-center justify-between mb-4">
-                  <span>Tu tiempo: 6 min</span>
-                  <span className="text-2xl font-bold">75%</span>
-                </div>
-                <p>Pon a prueba tus conocimientos</p> */}
 							<Image
 								src="/probar.png"
 								width={150}
@@ -104,12 +97,6 @@ export default function Main() {
 							<CardTitle>Combinar</CardTitle>
 						</CardHeader>
 						<CardContent>
-							{/* <div className="flex justify-between mb-4">
-                  <img src="/placeholder.svg?height=50&width=50" alt="Imagen 1" className="w-1/3" />
-                  <img src="/placeholder.svg?height=50&width=50" alt="Imagen 2" className="w-1/3" />
-                  <img src="/placeholder.svg?height=50&width=50" alt="Imagen 3" className="w-1/3" />
-                </div>
-                <p>Relaciona conceptos e ideas</p> */}
 							<Image
 								src="/combinar.png"
 								width={150}
@@ -124,8 +111,6 @@ export default function Main() {
 							<CardTitle>Soluciones de experto</CardTitle>
 						</CardHeader>
 						<CardContent>
-							{/* <img src="/placeholder.svg?height=100&width=150" alt="Soluciones de experto" className="w-full mb-4" />
-                <p>Aprende de ejemplos resueltos</p> */}
 							<Image
 								src="/soluciones.png"
 								width={150}
