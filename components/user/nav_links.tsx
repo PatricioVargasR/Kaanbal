@@ -33,12 +33,8 @@ export default function NavLinks() {
 
 	return (
 		<nav className="space-y-4">
-			<Link
-				href="/"
-				className="flex items-center space-x-2 text-[#0f4c81] font-bold"
-			>
-				<span>Kaanbal</span>
-			</Link>
+
+			<span className="flex items-center space-x-2 text-[#0f4c81] font-bold">Kaanbal</span>
 			<Link
 				href="/dashboard"
 				className="flex items-center space-x-2 hover:text-[#0f4c81] transition-colors focus:outline-none"
