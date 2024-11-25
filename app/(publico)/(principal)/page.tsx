@@ -11,6 +11,14 @@ import {
 	Brain,
 } from "lucide-react";
 import Link from "next/link";
+import { Book, FlaskConical, Combine, Lightbulb } from 'lucide-react'
+
+const activities = [
+	{ title: "Aprender", icon: Book, image: "/aprender.png", color: "bg-[#98bee0]" },
+	{ title: "Probar", icon: FlaskConical, image: "/probar.png", color: "bg-[#c4d8e9]" },
+	{ title: "Combinar", icon: Combine, image: "/combinar.png", color: "bg-[#98bee0]" },
+	{ title: "Soluciones de experto", icon: Lightbulb, image: "/soluciones.png", color: "bg-[#c4d8e9]" },
+  ]
 
 export default function Main() {
 	return (
@@ -63,63 +71,28 @@ export default function Main() {
 					tipos de actividades de estudio que puedes encontrar en
 					Kaanbal.
 				</p>
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-					<Card className="bg-[#98bee0]">
-						<CardHeader>
-							<CardTitle>Aprender</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<Image
-								src="/aprender.png"
-								width={150}
-								height={100}
-								className="w-full mb-4"
-								alt="Aprender"
-							/>
-						</CardContent>
-					</Card>
-					<Card className="bg-[#c4d8e9]">
-						<CardHeader>
-							<CardTitle>Probar</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<Image
-								src="/probar.png"
-								width={150}
-								height={100}
-								className="w-full mb-4"
-								alt="Probar"
-							/>
-						</CardContent>
-					</Card>
-					<Card className="bg-[#98bee0]">
-						<CardHeader>
-							<CardTitle>Combinar</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<Image
-								src="/combinar.png"
-								width={150}
-								height={100}
-								className="w-full mb-4"
-								alt="Combinar"
-							/>
-						</CardContent>
-					</Card>
-					<Card className="bg-[#c4d8e9]">
-						<CardHeader>
-							<CardTitle>Soluciones de experto</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<Image
-								src="/soluciones.png"
-								width={150}
-								height={100}
-								className="w-full mb-4"
-								alt="Soluciones"
-							/>
-						</CardContent>
-					</Card>
+				{/* Corregir en modo resize */}
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+					{activities.map((activity, index) => (
+						<Card key={index} className={`${activity.color} relative overflow-hidden sm:h-[200px] md:h-[350px]`}>
+							<CardHeader className="z-10 relative">
+								<CardTitle className="text-xl sm:text-2xl font-bold flex items-center">
+									<activity.icon className="w-6 h-6 mr-2 sm:hidden" />
+									{activity.title}
+								</CardTitle>
+							</CardHeader>
+							<CardContent className="p-0 absolute inset-0">
+								<div className="relative w-full h-full hidden sm:block">
+									<Image
+										src={activity.image}
+										fill
+										className="object-contain object-right-bottom"
+										alt={activity.title}
+									/>
+								</div>
+							</CardContent>
+						</Card>
+					))}
 				</div>
 			</section>
 
