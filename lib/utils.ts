@@ -120,3 +120,5 @@ export async function obtenerCantidadPreguntas(id_usuario: any) {
   // Regresar la cantidad total
   return preguntas.length
 }
+
+// Obtener los 3 cursos ordenados 

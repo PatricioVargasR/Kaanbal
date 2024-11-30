@@ -34,7 +34,7 @@ export default function LearningPage() {
         </div>
       </section>
       
-      <section className="bg-[#c4d8e9] p-4 rounded-lg text-center">
+      <section className="bg-[#c4d8e9] p-4 rounded-lg md:text-left  sm:text-center">
         <h2 className="text-xl font-bold mb-2">Nuevas funciones</h2>
         <p className="mb-4">
           ¡Prueba nuestra nueva asistente de estudios impulsada por IA!

@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { obtenerIdUsuario, obtenerTodosCursos } from "@/lib/utils"
-import { Cursos } from "@prisma/client"
 
 export default async function LibraryPage() {
   // Obtiene el id_usuario de la sesión
@@ -15,7 +14,7 @@ export default async function LibraryPage() {
     <div className="space-y-6 p-4">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
         <h1 className="text-2xl sm:text-3xl font-bold text-[#0f4c81]">Biblioteca</h1>
-        <Select>
+        {/* <Select>
           <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Ver" />
           </SelectTrigger>
@@ -23,7 +22,7 @@ export default async function LibraryPage() {
             <SelectItem value="units">Unidades</SelectItem>
             <SelectItem value="folders">Carpetas</SelectItem>
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
 
       <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
@@ -36,6 +35,15 @@ export default async function LibraryPage() {
             <SelectItem value="recent">Recientes</SelectItem>
             <SelectItem value="progress">En progreso</SelectItem>
             <SelectItem value="completed">Completado</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select>
+          <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectValue placeholder="Ver" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="units">Unidades</SelectItem>
+            <SelectItem value="folders">Carpetas</SelectItem>
           </SelectContent>
         </Select>
       </div>
