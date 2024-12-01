@@ -121,4 +121,20 @@ export async function obtenerCantidadPreguntas(id_usuario: any) {
   return preguntas.length
 }
 
-// Obtener los 3 cursos ordenados 
+// Obtener todas las conversaciones de un usuario
+export async function obtenerConversaciones(id_usuario: any) {
+
+  // Obtiene las conversaciones
+  const conversaciones = await prisma.conversaciones_IA.findMany({
+    include: {
+      Notas: {
+        where: {
+          usuario_id: id_usuario
+        }
+      }
+    }
+  })
+
+  // Regresa las conversaciones
+  return conversaciones
+}
