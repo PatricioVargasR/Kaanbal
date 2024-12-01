@@ -2,12 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { FileText, Trash2 } from 'lucide-react'
 import { obtenerConversaciones, obtenerIdUsuario } from "@/lib/utils"
-
-const conversations = [
-  { title: "Tarea de Matemáticas", pages: 3, size: "1.2 MB" },
-  { title: "Historia Fácil", pages: 5, size: "2.1 MB" },
-  { title: "Reporte de Laboratorio de Química", pages: 7, size: "3.5 MB" },
-]
+import Link from "next/link"
 
 export  default async function UserNotesPage() {
 
@@ -34,7 +29,7 @@ export  default async function UserNotesPage() {
               <div className="flex items-center space-x-4 w-full sm:w-auto">
                 <FileText size={24} />
                 <div>
-                  <h3 className="font-semibold">{conversacion.Notas?.nombre_archivo}</h3>
+                  <h3 className="font-semibold">{conversacion.Notas?.nombre_archivo.split('.')[0]}</h3>
                   <p className="text-sm text-gray-500">
                     Subido: {" "}
                     {conversacion.fecha_conversacion
@@ -45,7 +40,9 @@ export  default async function UserNotesPage() {
                 </div>
               </div>
               <div className="flex space-x-2 w-full sm:w-auto">
-                <Button variant="outline" className="flex-1 sm:flex-initial">Abrir</Button>
+                <Button variant="outline" className="flex-1 sm:flex-initial">
+                  <Link href={`/dashboard/chat-pdf/${conversacion.id_conversacion}`}> Abrir </Link>
+                </Button>
                 <Button variant="outline" size="icon" className="flex-none">
                   <Trash2 className="h-4 w-4" />
                 </Button>
