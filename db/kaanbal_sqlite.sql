@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS Notas (
     id_nota INTEGER PRIMARY KEY AUTOINCREMENT,
     usuario_id INTEGER REFERENCES Usuarios(id_usuario) ON DELETE CASCADE,
     nombre_archivo TEXT NOT NULL,
-    contenido_pdf BLOB NOT NULL,
+    contenido_pdf TEXT NOT NULL,
     fecha_subida DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 

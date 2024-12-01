@@ -91,7 +91,7 @@ model Notas {
   id_nota           Int                 @id @default(autoincrement())
   usuario_id        Int?
   nombre_archivo    String
-  contenido_pdf     Bytes
+  contenido_pdf     String
   fecha_subida      DateTime?           @default(now())
   Carpetas          Carpetas[]
   Conversaciones_IA Conversaciones_IA[]
