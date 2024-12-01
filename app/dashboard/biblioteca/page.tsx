@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { obtenerIdUsuario, obtenerTodosCursos } from "@/lib/utils"
 
 export default async function LibraryPage() {
+
   // Obtiene el id_usuario de la sesión
   const id_usuario = await obtenerIdUsuario();
 
