@@ -38,15 +38,6 @@ export default async function LibraryPage() {
             <SelectItem value="completed">Completado</SelectItem>
           </SelectContent>
         </Select>
-        <Select>
-          <SelectTrigger className="w-full sm:w-[180px]">
-            <SelectValue placeholder="Ver" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="units">Unidades</SelectItem>
-            <SelectItem value="folders">Carpetas</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
 
       {cursos.length > 0 ? (
