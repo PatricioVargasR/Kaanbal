@@ -148,3 +148,48 @@ export async function obtenerTodosTemas() {
   const temas: Temas[] = await prisma.temas.findMany();
   return temas;
 }
+
+// Obtener todas las conversaciones de un usuario
+export async function obtenerConversaciones(id_usuario: any) {
+  // Obtiene las conversaciones
+  const conversaciones = await prisma.conversaciones_IA.findMany({
+    include: {
+      Notas: {
+        where: {
+          usuario_id: id_usuario
+        }
+      }
+    }
+  })
+  // Regresa las conversaciones
+  return conversaciones
+}
+
+// Función para obtener los datos de una conversacion
+export async function obtenerMensajesConversacion(id_conversacion: any) {
+  // Obtiene los mensajes de la conversacion
+  const mensajes = await prisma.mensajes_conversacion.findMany({
+    where: {
+      conversacion_id: id_conversacion
+    }
+  })
+ return mensajes
+}
+// Función que obtiene el archivo pdf de la conversacion
+export async function obtenerDocumento(conversacion_id: any) {
+  // Obtener la conversacion correspondiente
+  const conversacion = await prisma.conversaciones_IA.findUnique({
+    where: {
+      id_conversacion: conversacion_id
+    }
+  })
+  // Obtener id de la nota correspondiente
+  const nota_id = conversacion?.nota_id ?? undefined
+  // Obtener el documento
+  const documento = await prisma.notas.findUnique({
+    where: {
+      id_nota: nota_id
+    }
+  })
+  return documento
+}
