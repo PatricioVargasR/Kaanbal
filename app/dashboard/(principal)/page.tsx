@@ -49,10 +49,12 @@ export default async function LearningPage() {
 
       {/* Nuevas funciones */}
       <section className="bg-[#c4d8e9] p-4 rounded-lg md:text-left sm:text-center">
-        <h2 className="text-xl font-bold mb-2">Nuevas funciones</h2>
-        <p className="mb-4">¡Prueba nuestra nueva asistente de estudios impulsada por IA!</p>
+        <h2 className="text-xl font-bold mb-2">Crea tus cursos con esta funcionalidad</h2>
+        <p className="mb-4">¡Genera tus cursos de manera automatica con IA!</p>
         <Button className="w-full sm:w-auto bg-[#0f4c81] hover:bg-[#98bee0]">
-          Saber más
+          <Link href="/dashboard/crear-curso">
+            Generar
+          </Link>
         </Button>
       </section>
 
