@@ -30,9 +30,12 @@ export async function obtenerTodosCursos(id_usuario: any) {
 }
 
 // Función para obtener los cursos ordenados por fecha más reciente
-export async function obtenerCursosRecientes(limite: number = 5) {
+export async function obtenerCursosRecientes(limite: number = 5, id_usuario: any) {
   try {
     const cursos = await prisma.cursos.findMany({
+      where: {
+        usuario_id: id_usuario
+      },
       orderBy: {
         fecha_creacion: 'desc',
       },

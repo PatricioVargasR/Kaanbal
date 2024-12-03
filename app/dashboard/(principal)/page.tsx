@@ -1,12 +1,17 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { obtenerTodasMaterias, obtenerTodosTemas, obtenerCursosRecientes } from "@/lib/utils";
+import { obtenerTodasMaterias, obtenerTodosTemas, obtenerCursosRecientes, obtenerSesion, obtenerIdUsuario } from "@/lib/utils";
 
 export default async function LearningPage() {
+
+  // Obtener id del usuario
+  const id = await obtenerIdUsuario()
+
+  // Obtener datos de la página
   const materias = await obtenerTodasMaterias();
   const temas = await obtenerTodosTemas();
-  const cursos = await obtenerCursosRecientes();
+  const cursos = await obtenerCursosRecientes(5, id);
   const emojis = ["📘", "📗", "📕", "📙", "📔", "📒", "📚", "📝", "✏️", "📓"]; // Lista de emojis
 
   return (
