@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { prisma } from "./prisma"
-import { Cursos, Logros, Usuarios, Materias, Temas } from "@prisma/client"
+import { Cursos, Logros, Usuarios, Materias, Temas, Nivel_educativo } from "@prisma/client"
 import { getServerSession } from "next-auth";
 
 // Función para obtener la sesión
@@ -195,4 +195,39 @@ export async function obtenerDocumento(conversacion_id: any) {
     }
   })
   return documento
+}
+
+// Obtieen los nivels educativos
+export async function obtenerNivelesEducativos() {
+
+  // Obtiene todos los niveles
+  const niveles: Nivel_educativo[] = await prisma.nivel_educativo.findMany()
+
+  return niveles
+}
+
+// Obtener todas las materias de un nivel educativo
+export async function obtenerMateriasNivel(id_nivel_educativo: any) {
+
+  // Obtiene las materias filtrandolas
+  const materias: Materias[] = await prisma.materias.findMany({
+    where: {
+      nivel_educativo_id: id_nivel_educativo
+    }
+  })
+
+  return materias
+}
+
+// Obtiene los temas de una materia en especifico
+export async function obtenerTemasMateria(id_materia: any) {
+
+  // Obtiene los temas filrtandolos
+  const temas: Temas[] = await prisma.temas.findMany({
+    where: {
+      materia_id: id_materia
+    }
+  })
+
+  return temas
 }
