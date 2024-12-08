@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { prisma } from "./prisma"
-import { Cursos, Logros, Usuarios, Materias, Temas, Nivel_educativo } from "@prisma/client"
+import { Cursos, Materias, Temas, Nivel_educativo, Notas, Conversaciones_IA } from "@prisma/client"
 import { getServerSession } from "next-auth";
 
 // Función para obtener la sesión
@@ -75,6 +75,34 @@ export async function crearUnUsuario(data: any) {
 
   return nuevoUsuario
 };
+
+// Función para crear una nueva nota
+export async function crearNuevaNota(data: any) {
+
+  // Crear la nueva nota
+  const nuevaNota = await prisma.notas.create({
+    data: data
+  })
+
+  return nuevaNota
+}
+
+
+// Función para crear una nueva conversacion
+export async function crearNuevaConversacion(id_nota: number) {
+
+  const conversacion = {
+    nota_id: id_nota
+  }
+
+  // Crear nueva conversacion
+  const nuevaConversacion = await prisma.conversaciones_IA.create({
+    data: conversacion
+  })
+
+  return nuevaConversacion
+
+}
 
 // Función para extrear el id_usuario de la sesión
 export async function obtenerIdUsuario() {
