@@ -39,7 +39,7 @@ export default function UserNotesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [conversationToDelete, setConversationToDelete] = useState<number | null>(null);
-
+  const [isLoading, setIsLoading] = useState(true); // Nuevo estado para controlar la carga
 
   // Obtener el ID del usuario
   useEffect(() => {
@@ -80,6 +80,8 @@ export default function UserNotesPage() {
             "No se pudo completar la solicitud, por favor intenta nuevamente.",
           variant: "destructive",
         });
+      } finally {
+        setIsLoading(false); // Finalizamos la carga
       }
     };
 
@@ -134,15 +136,14 @@ export default function UserNotesPage() {
         })
       }
     } catch (error) {
-			toast({
-				title: "Error fatal eliminar la conversación",
-				description:
-					"No se pudo completar la solicitud, por favor intenta nuevamente.",
-				variant: "destructive",
-			});
+      toast({
+        title: "Error fatal eliminar la conversación",
+        description:
+          "No se pudo completar la solicitud, por favor intenta nuevamente.",
+        variant: "destructive",
+      });
     }
   };
-
 
   const handleUpload = async () => {
     if (!uploadedFile || !idUsuario) return
@@ -162,10 +163,10 @@ export default function UserNotesPage() {
         setIsModalOpen(false)
         setUploadedFile(null)
         toast({
-					title: "Subida exitosa",
-					description: "Se ha subido el documento correctamente.",
-					variant: "default",
-				});
+          title: "Subida exitosa",
+          description: "Se ha subido el documento correctamente.",
+          variant: "default",
+        });
 
         // Espera 2 segundos antes de redirigir
         setTimeout(() => {
@@ -173,7 +174,6 @@ export default function UserNotesPage() {
         }, 1000);  // 2000 ms = 2 segundos
 
       } else {
-        // console.error(data.error)
         toast({
           title: "Error al subir el archivo",
           description: "Ocurrió un error, inténtalo de nuevo.",
@@ -181,12 +181,12 @@ export default function UserNotesPage() {
         });
       }
     } catch (error) {
-			toast({
-				title: "Error fatal subir el archivo",
-				description:
-					"No se pudo completar la solicitud, por favor intenta nuevamente.",
-				variant: "destructive",
-			});
+      toast({
+        title: "Error fatal subir el archivo",
+        description:
+          "No se pudo completar la solicitud, por favor intenta nuevamente.",
+        variant: "destructive",
+      });
     }
   }
 
@@ -201,22 +201,37 @@ export default function UserNotesPage() {
     setIsUploading(true)
   }
 
+  const handleCancelNewConversation = () => {
+    setIsUploading(false)
+  }
+
   const handleCancelUpload = () => {
     setIsModalOpen(false)
     setUploadedFile(null)
+    setIsUploading(false)
   }
-
 
   return (
     <div className="space-y-6 p-4">
       <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
         <h1 className="text-2xl sm:text-3xl font-bold text-[#0f4c81]">Chat</h1>
-        <Button
+        {isUploading ? (
+          <Button
+            className="w-full sm:w-auto bg-[#0f4c81] hover:bg-[#98bee0]"
+            onClick={handleCancelNewConversation}
+          >
+          Cancelar
+        </Button>
+
+        ): (
+          <Button
           className="w-full sm:w-auto bg-[#0f4c81] hover:bg-[#98bee0]"
           onClick={handleNewConversation}
         >
-          Nueva Conversación
-        </Button>
+        Nueva Conversación
+      </Button>
+
+        )}
       </div>
 
       {isUploading && (
@@ -239,7 +254,9 @@ export default function UserNotesPage() {
       />
 
       {/* Lista de conversaciones */}
-      {conversaciones.length > 0 ? (
+      {isLoading ? (
+        <p className="text-center text-gray-500">Cargando...</p>
+      ) : conversaciones.length > 0 ? (
         <div className="space-y-4">
           {conversaciones.map((conversacion, index) => (
             <Card key={index}>
@@ -276,10 +293,10 @@ export default function UserNotesPage() {
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-500">Cargando...</p>
+        <p className="text-center text-gray-500">No se encontraron datos</p>
       )}
 
-    <DeleteConversationDialog
+      <DeleteConversationDialog
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         onDelete={handleDelete}
@@ -287,4 +304,3 @@ export default function UserNotesPage() {
     </div>
   )
 }
-
