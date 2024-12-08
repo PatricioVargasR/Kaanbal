@@ -12,7 +12,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { useChat } from "ai/react"
+
 export default function ConversationPage() {
+
+  // Obtener datos del chat
+  const { messages, input, handleInputChange, handleSubmit } = useChat()
 
   // Obtener ID de la ruta
   const [id, setId] = useState<string | null>(null)
@@ -135,16 +140,16 @@ export default function ConversationPage() {
           </CardHeader>
           <CardContent className="overflow-y-auto flex-grow">
             <div className="space-y-4">
-              {mensajes.map((mensaje, index) => (
+              {messages.map((m) => (
                 <div
-                  key={index}
+                  key={m.id}
                   className={`p-2 rounded-lg ${
-                    mensaje.tipo === 'usuario'
+                    m.role === 'user'
                       ? 'bg-[#98bee0] text-right'
                       : 'bg-gray-100'
                   }`}
                 >
-                  {mensaje.contenido}
+                  {m.content}
                 </div>
               ))}
             </div>
@@ -167,17 +172,17 @@ export default function ConversationPage() {
         </Card>
       </div>
 
-      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mt-4">
+      <form className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mt-4" onSubmit={handleSubmit}>
         <Input
           placeholder="Pregunta algo..."
           className="flex-grow"
-          value={seleccionado}
-          onChange={(e) => setSeleccionado(e.target.value)}
+          value={input}
+          onChange={handleInputChange}
         />
         <Button className="bg-[#0f4c81] hover:bg-[#98bee0] w-full sm:w-auto">
           Enviar
         </Button>
-      </div>
+      </form>
     </div>
   )
 }
