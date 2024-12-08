@@ -259,3 +259,16 @@ export async function obtenerTemasMateria(id_materia: any) {
 
   return temas
 }
+
+// Función para eliminar una conversación (junto a su nota)
+export async function eliminarConversacion(id_conversacion: any)  {
+
+  // Elimina un elemento
+  const conversacion = await prisma.conversaciones_IA.delete({
+    where: {
+      id_conversacion: id_conversacion
+    }
+  })
+
+  return conversacion
+}
