@@ -1,5 +1,4 @@
 // pages/api/obtener-conversaciones.ts
-import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/lib/prisma"; // Ajusta la ruta según tu configuración
 import { NextResponse } from "next/server";
 
