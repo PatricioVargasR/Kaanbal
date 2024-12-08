@@ -3,11 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Trash2 } from "lucide-react";
+import { FileText, Trash2, Upload } from "lucide-react";
 import { obtenerConversaciones, obtenerIdUsuario } from "@/lib/utils";
 import Link from "next/link";
 import { useDropzone } from "react-dropzone";
 import { Conversaciones_IA, Usuarios } from "@prisma/client";
+import { FileUploadModal } from "@/components/user/file-upload-model"
 
 export default function UserNotesPage() {
 
@@ -27,10 +28,11 @@ export default function UserNotesPage() {
 
   // Estado para manejar el archivo subido y el contenido
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false); // Controla si se muestra el área de carga
   const [fileContent, setFileContent] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
   const [idUsuario, setIdUsuario] = useState<Usuarios | null>(null);
   const [conversaciones, setConversaciones] = useState<Conversaciones>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   // Obtener el ID del usuario
   useEffect(() => {
@@ -71,30 +73,70 @@ export default function UserNotesPage() {
 
     fetchConversaciones();
   }, [idUsuario]);
+
   // Configuración para subir archivo
   const onDrop = (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
+    const file = acceptedFiles[0]
     if (file) {
-      setUploadedFile(file);
-      const reader = new FileReader();
+      setUploadedFile(file)
+      setIsModalOpen(true)
+      const reader = new FileReader()
 
       reader.onload = () => {
         if (typeof reader.result === "string") {
-          setFileContent(reader.result);
+          setFileContent(reader.result)
         }
-      };
+      }
 
-      reader.readAsText(file); // O usa readAsArrayBuffer según tus necesidades
+      reader.readAsText(file)
     }
-  };
+  }
 
+  const handleUpload = async () => {
+    if (!uploadedFile || !idUsuario) return
+
+    const formData = new FormData();
+    formData.append('file', uploadedFile);
+    formData.append('idUsuario', idUsuario.toString());
+
+    try {
+      const res = await fetch("/api/pdf", {
+        method: "POST",
+        body: formData,
+      })
+
+      const data = await res.json()
+      if (res.ok) {
+        alert("Archivo subido con éxito")
+        setIsModalOpen(false)
+        setUploadedFile(null)
+        // Here you can update the conversations list
+      } else {
+        // console.error(data.error)
+        alert("Error al subir el archivo")
+      }
+    } catch (error) {
+      // console.error("Error al hacer la solicitud:", error)
+      alert("Error al subir el archivo")
+    }
+  }
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     accept: {
-      "application/pdf": [".pdf"], // Define que solo se acepten archivos PDF
+      "application/pdf": [".pdf"],
     },
-  });
+  })
+
+  const handleNewConversation = () => {
+    setIsUploading(true)
+  }
+
+  const handleCancelUpload = () => {
+    setIsModalOpen(false)
+    setUploadedFile(null)
+  }
+
 
   return (
     <div className="space-y-6 p-4">
@@ -102,33 +144,30 @@ export default function UserNotesPage() {
         <h1 className="text-2xl sm:text-3xl font-bold text-[#0f4c81]">Chat</h1>
         <Button
           className="w-full sm:w-auto bg-[#0f4c81] hover:bg-[#98bee0]"
-          onClick={() => setIsUploading(!isUploading)}
+          onClick={handleNewConversation}
         >
           Nueva Conversación
         </Button>
       </div>
 
-      {/* Muestra el área de subir archivo si está activado */}
       {isUploading && (
         <div
           {...getRootProps()}
-          className="border-dashed border-2 border-gray-400 p-6 text-center"
+          className="border-dashed border-2 border-gray-400 rounded-lg p-6 text-center cursor-pointer hover:bg-gray-50 transition-colors duration-200"
         >
           <input {...getInputProps()} />
-          <p>Arrastra y suelta un archivo aquí, o haz clic para seleccionarlo</p>
+          <Upload className="mx-auto h-12 w-12 text-gray-400" />
+          <p className="mt-2 text-sm text-gray-600">Arrastra y suelta un archivo PDF aquí, o haz clic para seleccionarlo</p>
         </div>
       )}
 
-      {/* Muestra detalles del archivo subido
-      {uploadedFile && (
-        <div className="mt-4">
-          <h3 className="font-bold">Archivo subido:</h3>
-          <p>Nombre: {uploadedFile.name}</p>
-          <pre className="bg-gray-100 p-4 overflow-x-auto">
-            {fileContent || "Cargando contenido..."}
-          </pre>
-        </div>
-      )} */}
+      <FileUploadModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        file={uploadedFile}
+        onUpload={handleUpload}
+        onCancel={handleCancelUpload}
+      />
 
       {/* Lista de conversaciones */}
       {conversaciones.length > 0 ? (
@@ -137,7 +176,7 @@ export default function UserNotesPage() {
             <Card key={index}>
               <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 space-y-4 sm:space-y-0">
                 <div className="flex items-center space-x-4 w-full sm:w-auto">
-                  <FileText size={24} />
+                  <FileText size={24} className="text-[#0f4c81]" />
                   <div>
                     <h3 className="font-semibold">
                       {conversacion.Notas?.nombre_archivo.split(".")[0]}
@@ -163,8 +202,9 @@ export default function UserNotesPage() {
           ))}
         </div>
       ) : (
-        <p className="text-center text-gray-500">No hay conversaciones</p>
+        <p className="text-center text-gray-500">Cargando...</p>
       )}
     </div>
-  );
+  )
 }
+
