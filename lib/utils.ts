@@ -206,6 +206,7 @@ export async function obtenerMensajesConversacion(id_conversacion: any) {
   })
  return mensajes
 }
+
 // Función que obtiene el archivo pdf de la conversacion
 export async function obtenerDocumento(conversacion_id: any) {
   // Obtener la conversacion correspondiente
@@ -269,6 +270,14 @@ export async function eliminarConversacion(id_conversacion: any)  {
       id_conversacion: id_conversacion
     }
   })
+
+  if ( conversacion !== undefined ) {
+    await prisma.notas.delete({
+      where: {
+        id_nota: Number(conversacion.nota_id)
+      }
+    })
+  }
 
   return conversacion
 }
