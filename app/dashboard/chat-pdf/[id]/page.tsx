@@ -13,6 +13,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { useChat } from "ai/react"
+import { toast } from "@/hooks/use-toast"
+import DeleteConversationDialog from "@/components/user/DeleteConversationDialog"
 
 export default function ConversationPage() {
 
@@ -25,6 +27,8 @@ export default function ConversationPage() {
   const [documento, setDocumento] = useState<any>(null); // Estado para almacenar el documento
   const [seleccionado, setSeleccionado] = useState<string>(""); // Estado para la selección de texto
   const [isDocumentOpen, setIsDocumentOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [conversationToDelete, setConversationToDelete] = useState<number | null>(null);
 
   // Obtener el ID solo en el cliente
   useEffect(() => {
@@ -95,6 +99,49 @@ export default function ConversationPage() {
     }
   }
 
+  const handleDeleteClick = (id_conversacion: number) => {
+    setConversationToDelete(id_conversacion);
+    setIsDeleteDialogOpen(true);
+  };
+
+  // Función para eliminar la conversación
+  const handleDelete = async () => {
+    if (!id) return;
+
+    try {
+      const res = await fetch(`/api/conversation/eliminar?id_conversacion=${conversationToDelete}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        setIsDeleteDialogOpen(false);
+        // Redirigir o actualizar estado para reflejar la eliminación
+        toast({
+          title: "Se eliminó correctamente",
+          description: "Se ha eliminado la conversación.",
+          variant: "default",
+        });
+
+        setTimeout(() => {
+          // Redirigir a otra página o actualizar estado para eliminar la conversación de la UI
+          window.location.href = "/dashboard/chat-pdf";  // Redirige a la página de dashboard
+        }, 1000)
+      } else {
+        toast({
+          title: "Error al eliminar",
+          description: "Ocurrió un error, inténtalo de nuevo.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error fatal al eliminar",
+        description: "No se pudo completar la solicitud, por favor intenta nuevamente.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen p-4">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0 mb-4">
@@ -103,7 +150,12 @@ export default function ConversationPage() {
           {documento ? documento.nombre_archivo.split('.')[0] : 'Cargando...'}
         </h1>
         <div className="flex space-x-2">
-          <Button variant="outline" size="icon" className="self-end sm:self-auto">
+          <Button
+              variant="outline"
+              size="icon"
+              className="self-end sm:self-auto"
+              onClick={() => handleDeleteClick(Number(id))}
+            >
             <Trash2 className="h-4 w-4" />
             <span className="sr-only">Eliminar conversación</span>
           </Button>
@@ -120,13 +172,18 @@ export default function ConversationPage() {
               </DialogHeader>
               {/* TODO: Corregir modo movil del documento */}
               <div className="max-h-[60vh] overflow-y-auto">
+                {documento !== null ? (
                 <iframe
-                  src={`data:application/pdf;base64,${documento?.contenido_pdf}`}
+                  src={`${documento?.contenido_pdf}`}
                   width="100%"
-                  height="600px"
+                  height="100%"
                   title={documento?.nombre_archivo}
                   onClick={manejarSeleccion}
-              />
+                />
+
+              ) : (
+                <p className="text-center text-gray-500">Cargando...</p>
+              ) }
               </div>
             </DialogContent>
           </Dialog>
@@ -188,6 +245,12 @@ export default function ConversationPage() {
           Enviar
         </Button>
       </form>
+
+      <DeleteConversationDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onDelete={handleDelete}
+      />
     </div>
   )
 }

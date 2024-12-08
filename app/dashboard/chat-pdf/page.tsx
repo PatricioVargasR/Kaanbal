@@ -3,12 +3,16 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Trash2, Upload } from "lucide-react";
+import { FileText, Trash2, Upload, X } from "lucide-react";
 import { obtenerConversaciones, obtenerIdUsuario } from "@/lib/utils";
 import Link from "next/link";
 import { useDropzone } from "react-dropzone";
 import { Conversaciones_IA, Usuarios } from "@prisma/client";
 import { FileUploadModal } from "@/components/user/file-upload-model"
+import { Dialog, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { DialogContent } from "@radix-ui/react-dialog";
+import DeleteConversationDialog from "@/components/user/DeleteConversationDialog";
+import { toast } from "@/hooks/use-toast";
 
 export default function UserNotesPage() {
 
@@ -33,6 +37,9 @@ export default function UserNotesPage() {
   const [idUsuario, setIdUsuario] = useState<Usuarios | null>(null);
   const [conversaciones, setConversaciones] = useState<Conversaciones>([]);
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [conversationToDelete, setConversationToDelete] = useState<number | null>(null);
+
 
   // Obtener el ID del usuario
   useEffect(() => {
@@ -67,7 +74,12 @@ export default function UserNotesPage() {
           console.error(data.error);
         }
       } catch (error) {
-        console.error("Error obteniendo las conversaciones:", error);
+        toast({
+          title: "Error al obtener las conversaciones",
+          description:
+            "No se pudo completar la solicitud, por favor intenta nuevamente.",
+          variant: "destructive",
+        });
       }
     };
 
@@ -92,6 +104,46 @@ export default function UserNotesPage() {
     }
   }
 
+  const handleDeleteClick = (id_conversacion: number) => {
+    setConversationToDelete(id_conversacion);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (conversationToDelete === null) return;
+
+    try {
+      const res = await fetch(`/api/conversation/eliminar?id_conversacion=${conversationToDelete}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) {
+        setConversaciones(prevConversaciones =>
+          prevConversaciones.filter(conv => conv.id_conversacion !== conversationToDelete)
+        );
+        setIsDeleteDialogOpen(false);
+        toast({
+          title: "Se eliminó correctamente",
+          description: "Se ha eliminado correctamente el documento",
+          variant: "default"
+        })
+      } else {
+        toast({
+          title: "Error al eliminar",
+          description: "Ocurrió un error, inténtela de nuevo más tarde",
+          variant: "destructive"
+        })
+      }
+    } catch (error) {
+			toast({
+				title: "Error fatal eliminar la conversación",
+				description:
+					"No se pudo completar la solicitud, por favor intenta nuevamente.",
+				variant: "destructive",
+			});
+    }
+  };
+
+
   const handleUpload = async () => {
     if (!uploadedFile || !idUsuario) return
 
@@ -107,17 +159,34 @@ export default function UserNotesPage() {
 
       const data = await res.json()
       if (res.ok) {
-        alert("Archivo subido con éxito")
         setIsModalOpen(false)
         setUploadedFile(null)
-        // Here you can update the conversations list
+        toast({
+					title: "Subida exitosa",
+					description: "Se ha subido el documento correctamente.",
+					variant: "default",
+				});
+
+        // Espera 2 segundos antes de redirigir
+        setTimeout(() => {
+          window.location.href = `/dashboard/chat-pdf/${data.id_conversacion}`;
+        }, 1000);  // 2000 ms = 2 segundos
+
       } else {
         // console.error(data.error)
-        alert("Error al subir el archivo")
+        toast({
+          title: "Error al subir el archivo",
+          description: "Ocurrió un error, inténtalo de nuevo.",
+          variant: "destructive",
+        });
       }
     } catch (error) {
-      // console.error("Error al hacer la solicitud:", error)
-      alert("Error al subir el archivo")
+			toast({
+				title: "Error fatal subir el archivo",
+				description:
+					"No se pudo completar la solicitud, por favor intenta nuevamente.",
+				variant: "destructive",
+			});
     }
   }
 
@@ -193,7 +262,12 @@ export default function UserNotesPage() {
                   <Button variant="outline" className="flex-1 sm:flex-initial">
                     <Link href={`/dashboard/chat-pdf/${conversacion.id_conversacion}`}> Abrir </Link>
                   </Button>
-                  <Button variant="outline" size="icon" className="flex-none">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="flex-none"
+                    onClick={() => handleDeleteClick(conversacion.id_conversacion)}
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -204,6 +278,12 @@ export default function UserNotesPage() {
       ) : (
         <p className="text-center text-gray-500">Cargando...</p>
       )}
+
+    <DeleteConversationDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onDelete={handleDelete}
+      />
     </div>
   )
 }
