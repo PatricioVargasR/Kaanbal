@@ -161,13 +161,18 @@ export default function ConversationPage() {
             <CardTitle>Documento</CardTitle>
           </CardHeader>
           <CardContent className="overflow-y-auto flex-grow">
-            <iframe
-              src={`${documento?.contenido_pdf}`}
-              width="100%"
-              height="100%"
-              title={documento?.nombre_archivo}
-              onClick={manejarSeleccion}
-            />
+            {documento !== null ? (
+              <iframe
+                src={`${documento?.contenido_pdf}`}
+                width="100%"
+                height="100%"
+                title={documento?.nombre_archivo}
+                onClick={manejarSeleccion}
+              />
+
+            ) : (
+              <p className="text-center text-gray-500">Cargando...</p>
+            ) }
           </CardContent>
         </Card>
       </div>
