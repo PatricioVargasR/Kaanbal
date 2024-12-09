@@ -15,6 +15,10 @@ import {
 import { useChat } from "ai/react"
 import { toast } from "@/hooks/use-toast"
 import DeleteConversationDialog from "@/components/user/DeleteConversationDialog"
+import ReactMarkdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 
 export default function ConversationPage() {
 
@@ -243,12 +247,20 @@ export default function ConversationPage() {
                 <div
                   key={m.id}
                   className={`p-2 rounded-lg ${
-                    m.role === "user"
-                      ? "bg-[#98bee0] text-right"
-                      : "bg-gray-100"
+                    m.role === "user" ? "bg-[#98bee0] text-right" : "bg-gray-100"
                   }`}
                 >
-                  {m.content}
+                  {m.role === "assistant" ? (
+                    <ReactMarkdown
+                      className="prose"
+                      rehypePlugins={[rehypeHighlight, rehypeRaw]}
+                      remarkPlugins={[remarkGfm]}
+                    >
+                      {m.content}
+                    </ReactMarkdown>
+                  ) : (
+                    m.content
+                  )}
                 </div>
               ))}
             </div>
