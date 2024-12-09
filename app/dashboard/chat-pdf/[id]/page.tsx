@@ -243,7 +243,8 @@ export default function ConversationPage() {
               )}
             </div>
             <div className="space-y-4">
-              {todosLosMensajes.map((m) => (
+              {todosLosMensajes.length !== 0  ? (
+                todosLosMensajes.map((m) => (
                 <div
                   key={m.id}
                   className={`p-2 rounded-lg ${
@@ -262,7 +263,11 @@ export default function ConversationPage() {
                     m.content
                   )}
                 </div>
-              ))}
+              ))
+            ) : (
+              <p className="text-center text-gray-500">Cargando...</p>
+            )}
+
             </div>
           </CardContent>
         </Card>
