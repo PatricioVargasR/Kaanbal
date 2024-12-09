@@ -68,7 +68,7 @@ DROP TABLE IF EXISTS Mensajes_conversacion;
 CREATE TABLE IF NOT EXISTS Mensajes_conversacion (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     conversacion_id INTEGER REFERENCES Conversaciones_IA(id_conversacion) ON DELETE CASCADE,
-    role TEXT CHECK(role in ('user', 'ai')) NOT NULL,
+    role TEXT CHECK(role in ('user', 'assistant')) NOT NULL,
     content TEXT NOT NULL
 );
 
