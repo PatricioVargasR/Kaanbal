@@ -232,10 +232,7 @@ export async function obtenerMensajesConversacion(id_conversacion: any) {
   const mensajes = await prisma.mensajes_conversacion.findMany({
     where: {
       conversacion_id: id_conversacion,
-    },
-    orderBy: {
-      id: 'desc', // Ordenar por el campo de creación en orden descendente
-    },
+    }
   });
   return mensajes;
 }
@@ -313,4 +310,32 @@ export async function eliminarConversacion(id_conversacion: any)  {
   }
 
   return conversacion
+}
+
+// Función para obtener un documento
+export async function obtenerRutaDocumento(id_conversacion: any){
+
+  // Obtiene el id de la nota
+  const conversacion = await prisma.conversaciones_IA.findUnique({
+    where: {
+      id_conversacion: Number(id_conversacion),
+    },
+    select: {
+      nota_id: true, // Seleccionar específicamente el campo nota_id
+    },
+  });
+
+
+  // Obtiene el documento correspoienteo
+  const documento = await prisma.notas.findUnique({
+    where: {
+      id_nota: Number(conversacion?.nota_id)
+    },
+    select: {
+      contenido_pdf: true
+    }
+  })
+
+  return documento?.contenido_pdf
+
 }
