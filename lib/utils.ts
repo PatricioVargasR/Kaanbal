@@ -112,7 +112,7 @@ export async function crearNuevoMensaje(id_conversacion: number) {
 
   const primerMensaje = {
     conversacion_id: id_conversacion,
-    role: "ai",
+    role: "assistant",
     content: "¡Hola! Soy tu asistente AI. Estoy aquí para ayudarte a explorar y entender el contenido del documento. Puedes seleccionarlo y preguntarme sobre cualquier parte, o pedirme resúmenes y explicaciones. Si tienes alguna duda, ¡solo pregúntame! Y recuerda, tus preguntas no serán almacenadas. ¡Comencemos!"
   }
 
