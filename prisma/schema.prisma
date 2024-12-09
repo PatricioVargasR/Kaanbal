@@ -74,10 +74,10 @@ model Materias {
 }
 
 model Mensajes_conversacion {
-  id_mensaje        Int                @id @default(autoincrement())
+  id                Int                @id @default(autoincrement())
   conversacion_id   Int?
-  tipo              String
-  contenido         String
+  role              String
+  content           String
   Conversaciones_IA Conversaciones_IA? @relation(fields: [conversacion_id], references: [id_conversacion], onDelete: Cascade, onUpdate: NoAction)
 }
 

@@ -66,10 +66,10 @@ DROP TABLE IF EXISTS Mensajes_conversacion;
 
 
 CREATE TABLE IF NOT EXISTS Mensajes_conversacion (
-    id_mensaje INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     conversacion_id INTEGER REFERENCES Conversaciones_IA(id_conversacion) ON DELETE CASCADE,
-    tipo TEXT CHECK(tipo in ('usuario', 'ia')) NOT NULL,
-    contenido TEXT NOT NULL
+    role TEXT CHECK(role in ('user', 'ai')) NOT NULL,
+    content TEXT NOT NULL
 );
 
 -- Tabla de Cursos

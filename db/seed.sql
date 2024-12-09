@@ -1,8 +1,3 @@
--- Insertar Usuarios
-INSERT INTO Usuarios (nombre, email, edad,  contrasena) VALUES
-  ('Juan Pérez', 'juan.perez@example.com', '10',  'hashed_password'),
-  ('María García', 'maria.garcia@example.com', '20', 'hashed_password');
-
 -- Insertar Niveles Educativos
 INSERT INTO Nivel_educativo (nombre_nivel) VALUES
   ('Básico'),
@@ -18,20 +13,6 @@ INSERT INTO Temas (nombre_tema, materia_id) VALUES
   ('Álgebra', 1),
   ('Electromagnetismo', 2);
 
--- Insertar Notas
-INSERT INTO Notas (usuario_id, nombre_archivo, contenido_pdf) VALUES
-  (1, 'algebra_basico.pdf', 'fkajsldkfa'),
-  (2, 'fisica_avanzada.pdf', 'lfajslkdfa');
-
--- Insertar Conversaciones IA
-INSERT INTO Conversaciones_IA (nota_id) VALUES
-  (1),
-  (2);
-
--- Insertar Mensajes Conversación
-INSERT INTO Mensajes_conversacion (conversacion_id, tipo, contenido) VALUES
-  (1, 'usuario', '¿Cómo resuelvo esta ecuación cuadrática?'),
-  (1, 'ia', 'Te explico paso a paso...');
 
 -- Insertar Cursos
 INSERT INTO Cursos (nombre_curso, usuario_id, tema_id, cantidad_preguntas) VALUES
