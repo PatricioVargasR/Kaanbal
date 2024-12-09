@@ -67,9 +67,9 @@ export default function ConversationPage() {
     const cargarMasMensajes = async () => {
       if (isLoadingMore) return; // Evitar múltiples cargas al mismo tiempo
       setIsLoadingMore(true);
-    
+
       const nuevosMensajes = await obtenerMensajes(page + 1);
-    
+
       setMensajes((prev) => {
         const mensajesUnicos = [
           ...prev,
@@ -79,7 +79,7 @@ export default function ConversationPage() {
         ];
         return mensajesUnicos;
       });
-    
+
       setPage((prev) => prev + 1);
       setIsLoadingMore(false);
     };

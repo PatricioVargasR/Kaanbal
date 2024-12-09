@@ -121,7 +121,17 @@ export async function crearNuevoMensaje(id_conversacion: number) {
   })
 
   return confirmacion
+}
 
+// Función para guardar un mensaje en la base de datos
+export async function guardarNuevoMensaje(mensaje: any) {
+
+  // Método para guardar el mensjae
+  const nuevoMensaje = await prisma.mensajes_conversacion.create({
+    data: mensaje
+  })
+
+  return nuevoMensaje
 }
 
 // Función para extrear el id_usuario de la sesión
