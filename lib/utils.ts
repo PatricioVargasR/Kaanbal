@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { prisma } from "./prisma"
-import { Cursos, Materias, Temas, Nivel_educativo, Notas, Conversaciones_IA } from "@prisma/client"
+import { Cursos, Materias, Temas, Nivel_educativo, Notas, Conversaciones_IA, Mensajes_conversacion } from "@prisma/client"
 import { getServerSession } from "next-auth";
 
 // Función para obtener la sesión
@@ -100,7 +100,27 @@ export async function crearNuevaConversacion(id_nota: number) {
     data: conversacion
   })
 
+  if (nuevaConversacion !== undefined) {
+    await crearNuevoMensaje(nuevaConversacion.id_conversacion)
+  }
+
   return nuevaConversacion
+}
+
+// Función para crear un primer mensaje
+export async function crearNuevoMensaje(id_conversacion: number) {
+
+  const primerMensaje = {
+    conversacion_id: id_conversacion,
+    role: "ai",
+    content: "¡Hola! Soy tu asistente AI. Estoy aquí para ayudarte a explorar y entender el contenido del documento. Puedes seleccionarlo y preguntarme sobre cualquier parte, o pedirme resúmenes y explicaciones. Si tienes alguna duda, ¡solo pregúntame! Y recuerda, tus preguntas no serán almacenadas. ¡Comencemos!"
+  }
+
+  const confirmacion = await prisma.mensajes_conversacion.create({
+    data: primerMensaje
+  })
+
+  return confirmacion
 
 }
 
@@ -201,10 +221,13 @@ export async function obtenerMensajesConversacion(id_conversacion: any) {
   // Obtiene los mensajes de la conversacion
   const mensajes = await prisma.mensajes_conversacion.findMany({
     where: {
-      conversacion_id: id_conversacion
-    }
-  })
- return mensajes
+      conversacion_id: id_conversacion,
+    },
+    orderBy: {
+      id: 'desc', // Ordenar por el campo de creación en orden descendente
+    },
+  });
+  return mensajes;
 }
 
 // Función que obtiene el archivo pdf de la conversacion

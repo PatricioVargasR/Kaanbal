@@ -29,6 +29,8 @@ export default function ConversationPage() {
   const [isDocumentOpen, setIsDocumentOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [conversationToDelete, setConversationToDelete] = useState<number | null>(null);
+  const [page, setPage] = useState(1); // Página actual para la paginación
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   // Obtener el ID solo en el cliente
   useEffect(() => {
@@ -40,17 +42,43 @@ export default function ConversationPage() {
   }, [])
 
   // Función para obtener los mensajes
-  async function obtenerMensajes() {
+  // Función para obtener los mensajes paginados
+  async function obtenerMensajes(pagina = 1) {
     try {
-      const response = await fetch(`/api/conversation/mensajes?id=${id}`, {
-        method: 'GET'
-      })
-      const mensajes = await response.json()
-      return mensajes
+      const response = await fetch(
+        `/api/conversation/mensajes?id=${id}&page=${pagina}`,
+        {
+          method: "GET",
+        }
+      );
+      const nuevosMensajes = await response.json();
+      return nuevosMensajes;
     } catch (error) {
-      console.error('Ocurrió un error: ', error)
+      console.error("Ocurrió un error: ", error);
+      return [];
     }
   }
+
+    // Cargar más mensajes
+    const cargarMasMensajes = async () => {
+      if (isLoadingMore) return; // Evitar múltiples cargas al mismo tiempo
+      setIsLoadingMore(true);
+    
+      const nuevosMensajes = await obtenerMensajes(page + 1);
+    
+      setMensajes((prev) => {
+        const mensajesUnicos = [
+          ...prev,
+          ...nuevosMensajes.filter(
+            (mensaje: any) => !prev.some((m) => m.id === mensaje.id) // Filtrar duplicados
+          ),
+        ];
+        return mensajesUnicos;
+      });
+    
+      setPage((prev) => prev + 1);
+      setIsLoadingMore(false);
+    };
 
   // Función para obtener el documento
   async function obtenerDocumento() {
@@ -142,6 +170,9 @@ export default function ConversationPage() {
     }
   };
 
+    // Combinar mensajes de useChat con los mensajes de la base de datos
+    const todosLosMensajes = [...mensajes, ...messages];
+
   return (
     <div className="flex flex-col h-screen p-4">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0 mb-4">
@@ -196,14 +227,25 @@ export default function ConversationPage() {
             <CardTitle>Chat</CardTitle>
           </CardHeader>
           <CardContent className="overflow-y-auto flex-grow">
+            <div className="text-center mb-4">
+              {mensajes.length > 10 && (
+                <Button
+                  variant="outline"
+                  onClick={cargarMasMensajes}
+                  disabled={isLoadingMore}
+                >
+                  {isLoadingMore ? "Cargando..." : "Cargar más"}
+                </Button>
+              )}
+            </div>
             <div className="space-y-4">
-              {messages.map((m) => (
+              {todosLosMensajes.map((m) => (
                 <div
                   key={m.id}
                   className={`p-2 rounded-lg ${
-                    m.role === 'user'
-                      ? 'bg-[#98bee0] text-right'
-                      : 'bg-gray-100'
+                    m.role === "user"
+                      ? "bg-[#98bee0] text-right"
+                      : "bg-gray-100"
                   }`}
                 >
                   {m.content}
