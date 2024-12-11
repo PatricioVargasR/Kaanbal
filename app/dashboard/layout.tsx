@@ -4,6 +4,7 @@ import "../globals.css";
 import Footer from "@/components/user/footer";
 import Aside from "@/components/user/aside";
 import { Toaster } from "@/components/ui/toaster";
+import Provider from "@/context/Provider";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -43,7 +44,8 @@ export default function RootLayout({
     <body
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
-      <div className="flex min-h-screen bg-[#f3f3f3] text-[#434343]">
+      <Provider>
+     <div className="flex min-h-screen bg-[#f3f3f3] text-[#434343]">
         <Aside />
         <div className="flex-1 flex flex-col">
             <main className="flex-1 p-8 pt-16 md:pt-8">
@@ -53,7 +55,9 @@ export default function RootLayout({
           </div>
       </div>
       <Toaster />
+    </Provider>
     </body>
+
   </html>
   )
 }
