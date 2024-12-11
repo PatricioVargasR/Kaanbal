@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Materias, Nivel_educativo, Temas } from "@prisma/client";
 import { useToast } from "@/hooks/use-toast"; // Asegúrate de tener esta utilidad
+import { Loader2 } from "lucide-react";
 
 export default function CreateUnitPage() {
   const [levels, setLevels] = useState<Nivel_educativo[]>([]); // Niveles educativos
@@ -29,6 +30,10 @@ export default function CreateUnitPage() {
   const [selectedTopic, setSelectedTopic] = useState<number | null>(null);
 
   const [numQuestions, setNumQuestions] = useState("10"); // Número de preguntas
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [dificultad, setDificultad] = useState("medio")
 
   const { toast } = useToast();
 
@@ -79,15 +84,12 @@ export default function CreateUnitPage() {
 
   // 4. Enviar datos al servidor
   const handleSubmit = async () => {
-
-    console.log(typeof selectedLevel, typeof selectedSubject, typeof selectedTopic)
+    setIsLoading(true)
 
     // Obtener los nombres correspondientes de nivel, materia y tema
     const selectedLevelName = levels.find(level => level.id_nivel_educativo === selectedLevel)?.nombre_nivel;
     const selectedSubjectName = subjects.find(subject => subject.id_materia === selectedSubject)?.nombre_materia;
     const selectedTopicName = topics.find(topic => topic.id_tema === selectedTopic)?.nombre_tema;
-
-    console.log(selectedLevelName, selectedSubjectName, selectedTopicName)
 
     if (!selectedLevelName || !selectedSubjectName || !selectedTopicName) {
       toast({
@@ -103,6 +105,7 @@ export default function CreateUnitPage() {
       materia: selectedSubjectName,       // Enviar el nombre de la materia
       tema: selectedTopicName,           // Enviar el nombre del tema
       preguntas: numQuestions,
+      const: dificultad
     };
 
     try {
@@ -134,6 +137,8 @@ export default function CreateUnitPage() {
         description: "No se pudo completar la solicitud, por favor intenta nuevamente.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -206,11 +211,31 @@ export default function CreateUnitPage() {
             </SelectContent>
           </Select>
 
+          {/* Seleccionar dificultad */}
+          <Select onValueChange={(value) => setDificultad(value)}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Selecciona tu dificultad" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="facil">Fácil</SelectItem>
+              <SelectItem value="medio">Medio</SelectItem>
+              <SelectItem value="dificil">Díficil</SelectItem>
+            </SelectContent>
+          </Select>
+
           <Button
             className="w-full bg-[#0f4c81] hover:bg-[#98bee0] text-white font-semibold py-2 px-4 rounded transition-colors duration-200"
             onClick={handleSubmit}
+            disabled={isLoading}
           >
-            Comenzar
+          {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Enviando datos...
+              </>
+            ) : (
+              'Comenzar'
+            )}
           </Button>
         </CardContent>
       </Card>

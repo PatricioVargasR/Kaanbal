@@ -26,7 +26,7 @@ INSERT INTO Explicaciones (curso_id, explicacion) VALUES
 
 -- Insertar Preguntas
 INSERT INTO Preguntas (curso_id, conversacion_id, tipo_pregunta, dificultad, pregunta, explicacion) VALUES
-  (1, 1, 'multiple_choice', 'facil', '¿Qué es una ecuación cuadrática?', 'Una ecuación cuadrática es de la forma ax² + bx + c = 0.');
+  (1, 1, 'multiple choice', 'facil', '¿Qué es una ecuación cuadrática?', 'Una ecuación cuadrática es de la forma ax² + bx + c = 0.');
 -- Insertar Opciones
 INSERT INTO Opciones (pregunta_id, texto_opcion, es_correcta) VALUES
   (1, 'ax² + bx + c = 0', true),
