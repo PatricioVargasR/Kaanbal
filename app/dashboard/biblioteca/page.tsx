@@ -1,41 +1,63 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { obtenerIdUsuario, obtenerTodosCursos } from "@/lib/utils"
+"use client";
 
-export default async function LibraryPage() {
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-  // Obtiene el id_usuario de la sesión
-  const id_usuario = await obtenerIdUsuario();
+// Datos estáticos para los cursos
+const datosCursos = [
+  { id_curso: 1, nombre_curso: "Curso A", fecha_creacion: new Date("2023-01-01"), cantidad_preguntas: 10 },
+  { id_curso: 2, nombre_curso: "Curso B", fecha_creacion: new Date("2023-03-01"), cantidad_preguntas: 20 },
+  { id_curso: 3, nombre_curso: "Curso C", fecha_creacion: new Date("2023-02-01"), cantidad_preguntas: 5 },
+  { id_curso: 4, nombre_curso: "Curso D", fecha_creacion: new Date("2023-04-01"), cantidad_preguntas: 15 },
+];
 
-  // Obtiene todos los cursos del usuario
-  const cursos = await obtenerTodosCursos(id_usuario);
+export default function LibraryPage() {
+  const [cursos, setCursos] = useState([...datosCursos]);
+  const [filtro, setFiltro] = useState("reciente"); // Valor por defecto
+
+  const filtrarCursos = (criterio: string) => {
+    setFiltro(criterio);
+    let cursosFiltrados = [...datosCursos];
+
+    switch (criterio) {
+      case "reciente":
+        cursosFiltrados.sort((a, b) => b.fecha_creacion.getTime() - a.fecha_creacion.getTime());
+        break;
+      case "ascendente":
+        cursosFiltrados.sort((a, b) => a.nombre_curso.localeCompare(b.nombre_curso));
+        break;
+      case "descendiente":
+        cursosFiltrados.sort((a, b) => b.nombre_curso.localeCompare(a.nombre_curso));
+        break;
+      case "preguntas":
+        cursosFiltrados.sort((a, b) => b.cantidad_preguntas - a.cantidad_preguntas);
+        break;
+      default:
+        break;
+    }
+
+    setCursos(cursosFiltrados);
+  };
 
   return (
     <div className="space-y-6 p-4">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
         <h1 className="text-2xl sm:text-3xl font-bold text-[#0f4c81]">Biblioteca</h1>
-        {/* <Select>
-          <SelectTrigger className="w-full sm:w-[180px]">
-            <SelectValue placeholder="Ver" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="units">Unidades</SelectItem>
-            <SelectItem value="folders">Carpetas</SelectItem>
-          </SelectContent>
-        </Select> */}
       </div>
 
       <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
         <Input type="search" placeholder="Buscar Unidad..." className="w-full sm:max-w-sm" />
-        <Select>
+        <Select onValueChange={(value) => filtrarCursos(value)}>
           <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Filtro" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="recent">Recientes</SelectItem>
-            <SelectItem value="progress">En progreso</SelectItem>
-            <SelectItem value="completed">Completado</SelectItem>
+            <SelectItem value="reciente">Recientes</SelectItem>
+            <SelectItem value="descendiente">Descendiente</SelectItem>
+            <SelectItem value="ascendente">Ascendente</SelectItem>
+            <SelectItem value="preguntas">Por pregunta</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -50,10 +72,7 @@ export default async function LibraryPage() {
               <CardContent>
                 <p className="text-sm sm:text-base">Cantidad de preguntas: {curso.cantidad_preguntas}</p>
                 <p className="text-sm sm:text-base">
-                  Creado:{" "}
-                  {curso.fecha_creacion
-                    ? new Date(curso.fecha_creacion).toLocaleDateString()
-                    : "Fecha no disponible"}
+                  Creado: {curso.fecha_creacion.toLocaleDateString()}
                 </p>
               </CardContent>
             </Card>
@@ -63,6 +82,5 @@ export default async function LibraryPage() {
         <p className="text-center text-gray-500">No hay cursos</p>
       )}
     </div>
-  )
+  );
 }
-
