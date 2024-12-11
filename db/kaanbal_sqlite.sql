@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS Preguntas (
     id_pregunta INTEGER PRIMARY KEY AUTOINCREMENT,
     curso_id INTEGER REFERENCES Cursos(id_curso) ON DELETE CASCADE,
     conversacion_id INTEGER REFERENCES Conversaciones_IA(id_conversacion) ON DELETE CASCADE,
-    tipo_pregunta TEXT CHECK(tipo_pregunta IN ('opcion_multiple', 'completar', 'unir', 'buscar')) NOT NULL,
+    tipo_pregunta TEXT CHECK(tipo_pregunta IN ('multiple_choice', 'true false', 'multiple select')) NOT NULL,
     dificultad TEXT CHECK(dificultad IN ('facil', 'medio', 'dificil')) NOT NULL,
     pregunta TEXT NOT NULL,
     explicacion TEXT NOT NULL,
