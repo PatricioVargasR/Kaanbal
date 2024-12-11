@@ -1,8 +1,9 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { prisma } from "./prisma"
-import { Cursos, Materias, Temas, Nivel_educativo, Notas, Conversaciones_IA, Mensajes_conversacion } from "@prisma/client"
+import { Cursos, Materias, Temas, Nivel_educativo } from "@prisma/client"
 import { getServerSession } from "next-auth";
+import { Quiz } from "./interfaces";
 
 // Función para obtener la sesión
 export async function obtenerSesion() {
@@ -338,4 +339,100 @@ export async function obtenerRutaDocumento(id_conversacion: any){
 
   return documento?.contenido_pdf
 
+}
+
+// Función para obtener el id del tema con base a su nombre
+export async function obtenerNombreTema(tema: any) {
+
+  // Obtiene el tema
+  const tema_obtenido = await prisma.temas.findFirst({
+    where: {
+      nombre_tema: tema
+    }
+  })
+
+  return tema_obtenido?.id_tema
+}
+
+// Función para obtener el id del usuario mediante su email
+export async function obtenerIdUsuarioEmail(email_usuario: any) {
+
+  // Obtiene el valor
+  const id_usuario = await prisma.usuarios.findUnique({
+    where: {
+      email: email_usuario
+    }
+  })
+
+  return id_usuario?.id_usuario
+}
+
+// Función de soporte
+export async function obtenerDatosQuizz(tema_id: any, email_usuario: any) {
+
+  // Obtiene el id del tema
+  const id_tema = await obtenerNombreTema(tema_id)
+
+  // obtiene el id del usaurio
+  const id_usuario = await obtenerIdUsuarioEmail(email_usuario)
+
+  return { id_tema, id_usuario }
+}
+
+// Función para guardar todo el contenido de un quizz
+export async function generarQuizz(datos_quiz: Quiz, datos_usuario: any) {
+
+  // Obtiene la explicación general y el quiz
+  const { general_explication, quiz } = datos_quiz
+
+  // Obtener los datos del usuario
+  const { nombreCurso, dificultad, temaId, usuarioId } = datos_usuario
+
+  console.log(datos_usuario)
+
+  // Obtiene el id del tema y del usuario
+  const {  id_tema, id_usuario } = await obtenerDatosQuizz(temaId, usuarioId)
+
+
+  // Inserta el curso
+  const curso = await prisma.cursos.create({
+    data: {
+      nombre_curso: nombreCurso,
+      usuario_id: Number(id_usuario),
+      tema_id: id_tema,
+      cantidad_preguntas: quiz.length
+    }
+  })
+
+   // Verificar que se haya creado el curso
+   if (!curso) return
+
+   // Insertar explicación general
+   const explicacion_general = await prisma.explicaciones.create({
+     data: {
+       curso_id: curso.id_curso,
+       explicacion: general_explication
+     }
+   })
+
+   // Verificar que se haya creado la explicación
+   if (!explicacion_general) return
+
+   // Inserta las preguntas
+   for (const question of quiz) {
+     const resultado_pregunta = await prisma.preguntas.create({
+       data: {
+         curso_id: curso.id_curso,
+         tipo_pregunta: question.type,
+         dificultad: dificultad,
+         pregunta:  question.question,
+         explicacion: question.explanation
+       }
+     })
+
+     console.log(resultado_pregunta)
+   }
+
+
+  return curso
 }

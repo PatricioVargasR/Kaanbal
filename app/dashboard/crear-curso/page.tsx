@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Materias, Nivel_educativo, Temas } from "@prisma/client";
 import { useToast } from "@/hooks/use-toast"; // Asegúrate de tener esta utilidad
 import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 export default function CreateUnitPage() {
   const [levels, setLevels] = useState<Nivel_educativo[]>([]); // Niveles educativos
@@ -34,6 +35,11 @@ export default function CreateUnitPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const [dificultad, setDificultad] = useState("medio")
+
+  const { data: session } = useSession()
+
+  const idUsuario = session?.user?.email
+
 
   const { toast } = useToast();
 
@@ -105,7 +111,8 @@ export default function CreateUnitPage() {
       materia: selectedSubjectName,       // Enviar el nombre de la materia
       tema: selectedTopicName,           // Enviar el nombre del tema
       preguntas: numQuestions,
-      const: dificultad
+      dificultad: dificultad,
+      usuario: idUsuario
     };
 
     try {
