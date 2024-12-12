@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge"
 import { prisma } from "./prisma"
 import { Cursos, Materias, Temas, Nivel_educativo } from "@prisma/client"
 import { getServerSession } from "next-auth";
-import { Quiz } from "./interfaces";
+import { Quiz, QuizCourse } from "./interfaces";
 
 // Función para obtener la sesión
 export async function obtenerSesion() {
@@ -536,4 +536,67 @@ export async function obtenerQuizz(cursoId: any) {
   };
 
   return formattedQuiz;
+}
+
+// Función para guardar todo el contenido de un quizz del curso
+export async function generarQuizzCurso(datos_quiz: QuizCourse, datos_usuario: any) {
+
+  // Obtiene la explicación general y el quiz
+  const { general_explication, quiz, nombreCurso, dificultad } = datos_quiz
+
+  // Obtiene los datos del usuario
+  const id_usuario = await obtenerIdUsuarioEmail(datos_usuario.usuarioId)
+
+  // Inserta el curso
+  const curso = await prisma.cursos.create({
+    data: {
+      nombre_curso: nombreCurso,
+      usuario_id: Number(id_usuario),
+      cantidad_preguntas: quiz.length
+    }
+  })
+
+   // Verificar que se haya creado el curso
+   if (!curso) return
+
+   // Insertar explicación general
+   const explicacion_general = await prisma.explicaciones.create({
+     data: {
+       curso_id: curso.id_curso,
+       explicacion: general_explication
+     }
+   })
+
+   // Verificar que se haya creado la explicación
+   if (!explicacion_general) return
+
+   // Inserta las preguntas
+   for (const question of quiz) {
+     const resultado_pregunta = await prisma.preguntas.create({
+       data: {
+         curso_id: curso.id_curso,
+         tipo_pregunta: question.type,
+         dificultad: dificultad,
+         pregunta:  question.question,
+         explicacion: question.explanation
+       }
+     })
+
+     // Verificar el resultado
+     if (!resultado_pregunta) continue
+
+     for (const option of question.options) {
+      await prisma.opciones.create({
+        data: {
+          pregunta_id: resultado_pregunta.id_pregunta,
+          texto_opcion: option,
+          es_correcta: question.rightAnswer.includes(option)
+        }
+      });
+    }
+
+   }
+
+  return curso
+
 }

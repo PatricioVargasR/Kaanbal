@@ -11,3 +11,11 @@ export interface Quiz {
     general_explication: string; // Explicación general del tema
     quiz: Question[]; // Array de preguntas
   }
+
+
+export interface QuizCourse {
+  nombreCurso: string;
+  dificultad: string;
+  general_explication: string;
+  quiz: Question[]
+}

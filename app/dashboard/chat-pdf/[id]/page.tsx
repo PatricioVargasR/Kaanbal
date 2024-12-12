@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Trash2, FileText } from 'lucide-react'
+import { Trash2, FileText, Loader2 } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -19,6 +19,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
+import { useSession } from "next-auth/react"
 
 export default function ConversationPage() {
 
@@ -35,6 +36,56 @@ export default function ConversationPage() {
   const [conversationToDelete, setConversationToDelete] = useState<number | null>(null);
   const [page, setPage] = useState(1); // Página actual para la paginación
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { data: session } = useSession(); // Obtener la sesión del usuario
+
+  // Función para iniciar la generación de curso
+  const generarCurso = async () => {
+    setIsLoading(true)
+    if (!session?.user?.email) {
+      toast({
+        title: "Usuario no autenticado",
+        description: "Por favor inicia sesión para generar un curso.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/units/start_pdf", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ usuario: session.user.email, documento: documento?.contenido_pdf }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        toast({
+          title: "Curso generado",
+          description: `El curso ha sido generado con éxito: ${result.cursoId}`,
+          variant: "default",
+        });
+      } else {
+        toast({
+          title: "Error al generar curso",
+          description: "Ocurrió un error inesperado.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error al generar curso",
+        description: "Ocurrió un error de red. Por favor, intenta nuevamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false)
+    }
+  };
+
 
   // Obtener el ID solo en el cliente
   useEffect(() => {
@@ -189,10 +240,21 @@ export default function ConversationPage() {
               variant="outline"
               size="icon"
               className="self-end sm:self-auto"
+              disabled={isLoading}
               onClick={() => handleDeleteClick(Number(id))}
             >
             <Trash2 className="h-4 w-4" />
             <span className="sr-only">Eliminar conversación</span>
+          </Button>
+          <Button onClick={generarCurso} variant="outline" className="bg-[#0f4c81] text-white hover:bg-[#98bee0]" disabled={isLoading}>
+            {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generando...
+                </>
+              ) : (
+                "Generar curso"
+						)}
           </Button>
           <Dialog open={isDocumentOpen} onOpenChange={setIsDocumentOpen}>
             <DialogTrigger asChild>

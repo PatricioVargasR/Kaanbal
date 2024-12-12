@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Loader2 } from "lucide-react"
 
 export default function CoursePage() {
   const router = useRouter()
@@ -24,6 +25,7 @@ export default function CoursePage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [explicacion, setExplicacion] = useState<string | null>(null)
   const [isExplanationOpen, setIsExplanationOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   // Obtener el ID solo del curso
   useEffect(() => {
@@ -124,6 +126,7 @@ export default function CoursePage() {
 
   // Función para iniciar el curso
   const iniciarCurso = () => {
+    setIsLoading(true)
     window.location.href = `/dashboard/curso/${id}/pregunta`
   }
 
@@ -240,17 +243,33 @@ export default function CoursePage() {
       <div className="flex justify-center mt-8 space-x-4">
         <Button
           onClick={iniciarCurso}
+          disabled={isLoading}
           className="w-full sm:w-auto px-8 py-3 text-lg font-semibold bg-[#0f4c81] hover:bg-[#0d3d68] text-white"
         >
-          Iniciar curso
+          {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Iniciando...
+                </>
+              ) : (
+                "Iniciar curso"
+						)}
         </Button>
         <Dialog open={isExplanationOpen} onOpenChange={setIsExplanationOpen}>
           <DialogTrigger asChild>
             <Button
               onClick={showExplanation}
+              disabled={isLoading}
               className="w-full sm:w-auto px-8 py-3 text-lg font-semibold bg-[#0f4c81] hover:bg-[#0d3d68] text-white rounded-md shadow-md transition-all"
             >
-              Mostrar explicación
+            {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Mostrar explicación
+                </>
+              ) : (
+                "Mostrar explicación"
+						)}
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px] p-6 bg-white rounded-lg shadow-lg border border-gray-200">
