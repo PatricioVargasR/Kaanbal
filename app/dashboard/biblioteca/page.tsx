@@ -14,6 +14,7 @@ export default function LibraryPage() {
   const [filtro, setFiltro] = useState("reciente");
   const [searchTerm, setSearchTerm] = useState("");
   const { data: session } = useSession()
+  const [isLoading, setIsLoading] = useState(true)
 
   const user = session?.user?.email
 
@@ -38,6 +39,8 @@ export default function LibraryPage() {
         setCursos(cursos)
       } catch(error) {
         console.error("Error al obtener los datos")
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -117,7 +120,9 @@ export default function LibraryPage() {
         </Select>
       </div>
 
-      {cursos.length > 0 ? (
+      {isLoading ? (
+        <p className="text-center text-gray-500">Cargando...</p>
+      ): cursos.length > 0 ? (
         <div className="space-y-4">
           {cursos.map((curso, index) => (
             <Link href={`/dashboard/curso/${curso.id_curso}`} key={index}>

@@ -18,33 +18,90 @@ INSERT INTO Materias (nombre_materia, nivel_educativo_id) VALUES
   ('Historia', 2),
   ('Español', 2);
 
+-- Insertar Materias
+INSERT INTO Materias (nombre_materia, nivel_educativo_id) VALUES
+  ('Matemáticas', 1),
+  ('Física', 1),
+  ('Química', 1),
+  ('Historia', 1),
+  ('Español', 1),
+  ('Matemáticas', 2),
+  ('Física', 2),
+  ('Química', 2),
+  ('Historia', 2),
+  ('Español', 2);
+
 -- Insertar Temas
 INSERT INTO Temas (nombre_tema, materia_id) VALUES
+  -- Materia: Matemáticas
   ('Álgebra', 1),
   ('Geometría', 1),
   ('Probabilidad y Estadística', 1),
   ('Cálculo', 1),
   ('Aritmética', 1),
+
+  -- Materia: Física
   ('Cinemática', 2),
   ('Ley de Ohm', 2),
   ('Electromagnetismo', 2),
   ('Trabajo y Energía', 2),
   ('Óptica', 2),
+
+  -- Materia: Química
   ('Estequiometría', 3),
   ('Ácidos y Bases', 3),
   ('Reacciones Químicas', 3),
   ('Termodinámica', 3),
   ('Soluciones', 3),
+
+  -- Materia: Historia
   ('México Independiente', 4),
   ('Revolución Mexicana', 4),
   ('Historia Universal', 4),
   ('Imperios Antiguos', 4),
   ('Movimientos Sociales', 4),
+
+  -- Materia: Español
   ('Lectura y Comprensión', 5),
   ('Redacción', 5),
   ('Ortografía y Gramática', 5),
   ('Literatura Mexicana', 5),
-  ('Análisis de Textos', 5);
+  ('Análisis de Textos', 5),
+
+  -- Nivel Educativo 2 - Matemáticas
+  ('Álgebra', 6),
+  ('Geometría', 6),
+  ('Probabilidad y Estadística', 6),
+  ('Cálculo', 6),
+  ('Aritmética', 6),
+
+  -- Nivel Educativo 2 - Física
+  ('Cinemática', 7),
+  ('Ley de Ohm', 7),
+  ('Electromagnetismo', 7),
+  ('Trabajo y Energía', 7),
+  ('Óptica', 7),
+
+  -- Nivel Educativo 2 - Química
+  ('Estequiometría', 8),
+  ('Ácidos y Bases', 8),
+  ('Reacciones Químicas', 8),
+  ('Termodinámica', 8),
+  ('Soluciones', 8),
+
+  -- Nivel Educativo 2 - Historia
+  ('México Independiente', 9),
+  ('Revolución Mexicana', 9),
+  ('Historia Universal', 9),
+  ('Imperios Antiguos', 9),
+  ('Movimientos Sociales', 9),
+
+  -- Nivel Educativo 2 - Español
+  ('Lectura y Comprensión', 10),
+  ('Redacción', 10),
+  ('Ortografía y Gramática', 10),
+  ('Literatura Mexicana', 10),
+  ('Análisis de Textos', 10);
 
 -- Insertar Criterios
 INSERT INTO Criterio (cantidad, condicion) VALUES
