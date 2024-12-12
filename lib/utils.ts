@@ -436,3 +436,30 @@ export async function generarQuizz(datos_quiz: Quiz, datos_usuario: any) {
 
   return curso
 }
+
+// Función para obtener un curso en especifico
+export async function obtenerCurso(curso_id: any) {
+
+  // Obtiene el curso
+  const curso = await prisma.cursos.findUnique({
+    where:{
+      id_curso: curso_id
+    }
+  })
+
+  return curso
+}
+
+
+// Función para obtener las preguntas de un curso
+export async function obtenerPreguntasCurso(id_curso: any) {
+
+  // Obiiene las preguntas
+  const preguntas = await prisma.preguntas.findMany({
+    where: {
+      curso_id: id_curso
+    }
+  })
+
+  return preguntas
+}

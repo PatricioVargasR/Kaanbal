@@ -24,7 +24,7 @@ export default async function LearningPage() {
         <div className="grid grid-cols-1 gap-4">
           {cursos && cursos.length > 0 ? (
             cursos.map((curso, index) => (
-              <Link href={`/curso/${curso.nombre_curso}`} key={index}>
+              <Link href={`/dashboard/curso/${curso.id_curso}`} key={index}>
                 <Card className="shadow-md rounded-lg border border-gray-300 transition-transform duration-300 transform hover:scale-[1.03] hover:shadow-lg hover:shadow-gray-400">
                   <CardHeader>
                     <CardTitle className="text-lg sm:text-xl">
