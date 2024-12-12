@@ -5,54 +5,55 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Question } from "@/lib/interfaces";
 
-interface Result {
-  question: string;
-  userAnswer: string;
-  correctAnswer: string;
-  isCorrect: boolean;
+interface QuizResults {
+  questions: {
+    question: string;
+    userAnswer: string[];
+    correctAnswer: string[];
+    isCorrect: boolean;
+    explanation: string;
+  }[];
+  score: number;
+  totalQuestions: number;
 }
 
 export default function ResultsPage() {
   const router = useRouter();
-  const [results, setResults] = useState<Result[]>([]);
-  const [score, setScore] = useState(0);
+  const [results, setResults] = useState<QuizResults | null>(null);
+  const [id, setId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Simular la carga de resultados desde una API o estado global
-    const fetchResults = async () => {
-      // Reemplazar esto con una llamada real a la API o recuperación del estado
-      const mockResults: Result[] = [
-        {
-          question: "¿Cuál es la solución de la ecuación 2x + 5 = 13?",
-          userAnswer: "x = 4",
-          correctAnswer: "x = 4",
-          isCorrect: true,
-        },
-        {
-          question: "¿Cuál es el valor de π (pi) redondeado a dos decimales?",
-          userAnswer: "3.15",
-          correctAnswer: "3.14",
-          isCorrect: false,
-        },
-        // Añadir más resultados aquí
-      ];
-      setResults(mockResults);
-      setScore(mockResults.filter(result => result.isCorrect).length);
-    };
+    if(typeof window !== "undefined") {
+      const queryString = window.location.href;
+      const extractedId = queryString.split('/')[5];
+      setId(extractedId);
 
-    fetchResults();
+      // Recuperar resultados del localStorage
+      const storedResults = localStorage.getItem('quizResults');
+      if (storedResults) {
+        setResults(JSON.parse(storedResults));
+        // Limpiar resultados del localStorage después de cargarlos
+        localStorage.removeItem('quizResults');
+      }
+    }
   }, []);
 
   const handleReviewQuestions = () => {
-    // Implementar la lógica para revisar las preguntas
-    console.log("Revisando preguntas");
+    if (id) {
+      router.push(`/dashboard/curso/${id}`);
+    }
   };
 
   const handleReturnToCourse = () => {
-    router.push("/course");
+    if (id) {
+      router.push(`/dashboard/curso/${id}`);
+    }
   };
+
+  if (!results) {
+    return <div>Cargando resultados...</div>;
+  }
 
   return (
     <div className="space-y-6 px-4 sm:px-6 max-w-4xl mx-auto py-8">
@@ -68,15 +69,17 @@ export default function ResultsPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="text-center">
-            <p className="text-5xl font-bold text-[#0f4c81]">{score}/{results.length}</p>
+            <p className="text-5xl font-bold text-[#0f4c81]">
+              {results.score}/{results.totalQuestions}
+            </p>
             <p className="text-xl mt-2">respuestas correctas</p>
           </div>
           <Progress 
-            value={(score / results.length) * 100} 
+            value={(results.score / results.totalQuestions) * 100} 
             className="w-full h-4"
           />
           <p className="text-center text-lg">
-            Has completado {results.length} preguntas con un {Math.round((score / results.length) * 100)}% de acierto.
+            Has completado {results.totalQuestions} preguntas con un {Math.round((results.score / results.totalQuestions) * 100)}% de acierto.
           </p>
         </CardContent>
       </Card>
@@ -87,17 +90,20 @@ export default function ResultsPage() {
         </CardHeader>
         <CardContent>
           <ul className="space-y-4">
-            {results.map((result, index) => (
+            {results.questions.map((result, index) => (
               <li key={index} className="border-b pb-4 last:border-b-0">
                 <p className="font-medium">{index + 1}. {result.question}</p>
                 <p className={`mt-1 ${result.isCorrect ? 'text-green-600' : 'text-red-600'}`}>
-                  Tu respuesta: {result.userAnswer}
+                  Tu respuesta: {result.userAnswer.join(", ")}
                 </p>
                 {!result.isCorrect && (
                   <p className="mt-1 text-green-600">
-                    Respuesta correcta: {result.correctAnswer}
+                    Respuesta correcta: {result.correctAnswer.join(", ")}
                   </p>
                 )}
+                <p className="mt-2 text-gray-600 text-sm">
+                  {result.explanation}
+                </p>
               </li>
             ))}
           </ul>
@@ -121,4 +127,3 @@ export default function ResultsPage() {
     </div>
   );
 }
-

@@ -8,7 +8,19 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { Question, Quiz } from "@/lib/interfaces";
+import { Quiz } from "@/lib/interfaces";
+
+interface QuizResults {
+  questions: {
+    question: string;
+    userAnswer: string[];
+    correctAnswer: string[];
+    isCorrect: boolean;
+    explanation: string;
+  }[];
+  score: number;
+  totalQuestions: number;
+}
 
 export default function QuestionPage() {
   const router = useRouter();
@@ -18,6 +30,11 @@ export default function QuestionPage() {
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [showExplanation, setShowExplanation] = useState(false);
   const [isAnswerVerified, setIsAnswerVerified] = useState(false);
+  const [quizResults, setQuizResults] = useState<QuizResults>({
+    questions: [],
+    score: 0,
+    totalQuestions: 0,
+  });
 
   // Obtener el ID solo del curso
   useEffect(() => {
@@ -82,6 +99,31 @@ export default function QuestionPage() {
   const handleVerify = () => {
     setIsAnswerVerified(true);
     setShowExplanation(true);
+
+    // Update quiz results
+    if (currentQuestion) {
+      const isAnswerCorrect = currentQuestion.rightAnswer.length === selectedAnswers.length &&
+        currentQuestion.rightAnswer.every(answer => selectedAnswers.includes(answer));
+
+      const updatedResults = {
+        ...quizResults,
+        questions: [
+          ...quizResults.questions,
+          {
+            question: currentQuestion.question,
+            userAnswer: selectedAnswers,
+            correctAnswer: currentQuestion.rightAnswer,
+            isCorrect: isAnswerCorrect,
+            explanation: currentQuestion.explanation
+          }
+        ],
+        score: quizResults.score + (isAnswerCorrect ? 1 : 0),
+        totalQuestions: quiz?.quiz.length ?? 0
+      };
+
+      setQuizResults(updatedResults);
+      localStorage.setItem('quizResults', JSON.stringify(updatedResults));
+    }
   };
 
   const handleNextQuestion = () => {
@@ -91,8 +133,8 @@ export default function QuestionPage() {
       setShowExplanation(false);
       setIsAnswerVerified(false);
     } else {
-      // Navegar a una página de resultados o finalización
-      router.push("/results");
+      // Guardar resultados finales y navegar a la página de resultados
+      router.push(`/dashboard/curso/${id}/pregunta/resultado`);
     }
   };
 
