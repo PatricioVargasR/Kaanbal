@@ -45,7 +45,7 @@ export default async function ProfilePage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-[#0f4c81]">{usuario?.nombre}</h1>
           <p className="text-sm text-muted-foreground">{usuario?.proveedor_auth}</p>
         </div>
-        <Button variant="outline" className="w-full sm:w-auto mt-4 sm:mt-0">Cambiar icono</Button>
+        {/* <Button variant="outline" className="w-full sm:w-auto mt-4 sm:mt-0">Cambiar icono</Button> */}
       </div>
 
       <Card>
@@ -58,7 +58,7 @@ export default async function ProfilePage() {
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div key="Estadistica_usuario1" className="text-center">
-              <p className="text-sm text-muted-foreground">Cursos completados</p>
+              <p className="text-sm text-muted-foreground">Cursos creados</p>
               <p className="text-2xl font-bold">{cantidadCursos}</p>
             </div>
             <div key="Estadistica_usuario2" className="text-center">
