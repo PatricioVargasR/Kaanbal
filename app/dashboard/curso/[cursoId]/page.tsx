@@ -248,20 +248,35 @@ export default function CoursePage() {
           <DialogTrigger asChild>
             <Button
               onClick={showExplanation}
-              className="w-full sm:w-auto px-8 py-3 text-lg font-semibold bg-[#0f4c81] hover:bg-[#0d3d68] text-white"
+              className="w-full sm:w-auto px-8 py-3 text-lg font-semibold bg-[#0f4c81] hover:bg-[#0d3d68] text-white rounded-md shadow-md transition-all"
             >
               Mostrar explicación
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[500px] p-6 bg-white rounded-lg shadow-lg border border-gray-200">
             <DialogHeader>
-              <DialogTitle>Explicación</DialogTitle>
-              <DialogDescription>
-                {explicacion || 'Cargando explicación...'}
+              <DialogTitle className="text-2xl font-bold text-[#0f4c81] text-center">
+                Explicación Detallada
+              </DialogTitle>
+              <DialogDescription className="mt-4 text-gray-700 text-sm sm:text-base leading-6">
+                {explicacion ? (
+                  explicacion
+                ) : (
+                  <span className="text-gray-400 italic">Cargando explicación...</span>
+                )}
               </DialogDescription>
             </DialogHeader>
+            <div className="mt-6 flex justify-center">
+              <Button
+                variant="outline"
+                onClick={() => setIsExplanationOpen(false)}
+                className="px-6 py-2 text-sm font-medium text-[#0f4c81] border border-[#0f4c81] hover:bg-gray-100 rounded-md transition"
+              >
+                Cerrar
+              </Button>
+            </div>
           </DialogContent>
-        </Dialog>
+      </Dialog>
       </div>
     </div>
   );
