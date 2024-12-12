@@ -5,13 +5,25 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { useEffect, useState } from "react"
 import { Cursos, Preguntas } from "@prisma/client"
+import { useRouter } from 'next/navigation'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 export default function CoursePage() {
+  const router = useRouter()
   // Estados
   const [id, setId] = useState<string | null>(null)
   const [curso, setCurso] = useState<Cursos | null>(null);
   const [preguntas, setPreguntas] = useState<Preguntas[]>([])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [explicacion, setExplicacion] = useState<string | null>(null)
+  const [isExplanationOpen, setIsExplanationOpen] = useState(false)
 
   // Obtener el ID solo del curso
   useEffect(() => {
@@ -52,6 +64,20 @@ export default function CoursePage() {
     }
   }
 
+  // Función para obtener la explicación
+  async function obtenerExplicacion() {
+    try {
+      const response = await fetch(`/api/course/obtenerExplicacion?id=${id}`, {
+        method: 'GET'
+      })
+
+      const data = await response.json()
+      return data
+    } catch (error) {
+      console.error("Error al obtener la explicación")
+    }
+  }
+
   // Obtiene dinamicamente los datos del curso con base al id
   useEffect(() =>{
     if (!id) return
@@ -61,8 +87,10 @@ export default function CoursePage() {
       try {
         const curso = await obtenerCurso()
         const preguntas = await obtenerPreguntas()
+        const explicacion = await obtenerExplicacion()
         setCurso(curso)
         setPreguntas(preguntas)
+        setExplicacion(explicacion)
 
       } catch(error) {
         console.error("Error al cargar los datos")
@@ -94,6 +122,10 @@ export default function CoursePage() {
   // Obtener la pregunta actual
   const currentQuestion = preguntas[currentQuestionIndex]
 
+  // Función para iniciar el curso
+  const iniciarCurso = () => {
+    window.location.href = `/dashboard/curso/${id}/pregunta`
+  }
 
   // Función para calcular el promedio basado en preguntas completadas correctamente la primera vez
   const calcularPromedio = () => {
@@ -104,6 +136,12 @@ export default function CoursePage() {
 
     return Math.round(promedio)
   }
+
+  // Función para mostrar la explicación
+  const showExplanation = async () => {
+      setIsExplanationOpen(true)
+    }
+
   return (
     <div className="space-y-6 p-4">
       <div>
@@ -172,16 +210,16 @@ export default function CoursePage() {
           <p className="text-lg mb-8 text-center">
             {currentQuestion ? currentQuestion.pregunta : 'Cargando...'}
           </p>
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <Button
               variant="outline"
-              className="w-32"
+              className="w-full sm:w-32"
               onClick={goToPreviousQuestion}
               disabled={currentQuestionIndex === 0}
             >
               ← Anterior
             </Button>
-            <div className="flex-1 px-4">
+            <div className="flex-1 w-full sm:px-4">
               <Progress
                 value={((currentQuestionIndex + 1) / preguntas.length) * 100}
                 className="w-full"
@@ -189,7 +227,7 @@ export default function CoursePage() {
             </div>
             <Button
               variant="outline"
-              className="w-32"
+              className="w-full sm:w-32"
               onClick={goToNextQuestion}
               disabled={currentQuestionIndex === preguntas.length - 1}
             >
@@ -198,7 +236,34 @@ export default function CoursePage() {
           </div>
         </CardContent>
       </Card>
+
+      <div className="flex justify-center mt-8 space-x-4">
+        <Button
+          onClick={iniciarCurso}
+          className="w-full sm:w-auto px-8 py-3 text-lg font-semibold bg-[#0f4c81] hover:bg-[#0d3d68] text-white"
+        >
+          Iniciar curso
+        </Button>
+        <Dialog open={isExplanationOpen} onOpenChange={setIsExplanationOpen}>
+          <DialogTrigger asChild>
+            <Button
+              onClick={showExplanation}
+              className="w-full sm:w-auto px-8 py-3 text-lg font-semibold bg-[#0f4c81] hover:bg-[#0d3d68] text-white"
+            >
+              Mostrar explicación
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Explicación</DialogTitle>
+              <DialogDescription>
+                {explicacion || 'Cargando explicación...'}
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
-  )
+  );
 }
 
