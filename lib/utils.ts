@@ -388,11 +388,8 @@ export async function generarQuizz(datos_quiz: Quiz, datos_usuario: any) {
   // Obtener los datos del usuario
   const { nombreCurso, dificultad, temaId, usuarioId } = datos_usuario
 
-  console.log(datos_usuario)
-
   // Obtiene el id del tema y del usuario
   const {  id_tema, id_usuario } = await obtenerDatosQuizz(temaId, usuarioId)
-
 
   // Inserta el curso
   const curso = await prisma.cursos.create({
@@ -430,7 +427,19 @@ export async function generarQuizz(datos_quiz: Quiz, datos_usuario: any) {
        }
      })
 
-     console.log(resultado_pregunta)
+     // Verificar el resultado
+     if (!resultado_pregunta) continue
+
+     for (const option of question.options) {
+      await prisma.opciones.create({
+        data: {
+          pregunta_id: resultado_pregunta.id_pregunta,
+          texto_opcion: option,
+          es_correcta: question.rightAnswer.includes(option)
+        }
+      });
+    }
+
    }
 
 
@@ -462,4 +471,69 @@ export async function obtenerPreguntasCurso(id_curso: any) {
   })
 
   return preguntas
+}
+
+// Función para obtener un curso
+export async function obtenerExplicacionCurso(id_curso: any) {
+
+  // Obtener valor
+  const explicacion = await prisma.explicaciones.findFirst({
+    where: {
+      curso_id: id_curso
+    }
+  })
+
+  return explicacion?.explicacion
+}
+
+export async function obtenerQuizz(cursoId: any) {
+  const quiz = await prisma.cursos.findUnique({
+    where: {
+      id_curso: cursoId
+    },
+    select: {
+      Explicaciones: {
+        select: {
+          explicacion: true
+        }
+      },
+      Preguntas: {
+        select: {
+          pregunta: true,
+          tipo_pregunta: true,
+          explicacion: true,
+          Opciones: {
+            select: {
+              texto_opcion: true,
+              es_correcta: true
+            }
+          }
+        }
+      }
+    }
+  });
+
+  if (!quiz) {
+    throw new Error('Quiz no encontrado');
+  }
+
+  // Transformar los datos al formato requerido
+  const formattedQuiz: Quiz = {
+    general_explication: quiz.Explicaciones[0]?.explicacion || '',
+    quiz: quiz.Preguntas.map(pregunta => {
+      const correctOptions = pregunta.Opciones.filter(opcion => opcion.es_correcta)
+        .map(opcion => opcion.texto_opcion);
+
+      return {
+        question: pregunta.pregunta,
+        type: pregunta.tipo_pregunta as "multiple choice" | "true false" | "multiple select",
+        numberOfCorrectAnswers: correctOptions.length,
+        options: pregunta.Opciones.map(opcion => opcion.texto_opcion),
+        rightAnswer: correctOptions,
+        explanation: pregunta.explicacion
+      };
+    })
+  };
+
+  return formattedQuiz;
 }
