@@ -42,7 +42,7 @@ export default async function LearningPage() {
               </Link>
             ))
           ) : (
-            <p>No hay actividades recientes disponibles.</p>
+            <p className="text-center text-gray-500">No hay actividades recientes disponibles.</p>
           )}
         </div>
       </section>

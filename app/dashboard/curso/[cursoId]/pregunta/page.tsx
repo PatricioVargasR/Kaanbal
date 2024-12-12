@@ -144,7 +144,7 @@ export default function QuestionPage() {
   };
 
   if (!currentQuestion) {
-    return <div>Cargando preguntas...</div>;
+    return <div className="text-center text-gray-500">Cargando preguntas...</div>;
   }
 
   const isCorrect = (option: string) => currentQuestion.rightAnswer.includes(option);

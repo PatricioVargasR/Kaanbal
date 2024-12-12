@@ -201,13 +201,17 @@ export async function obtenerCantidadPreguntas(id_usuario: any) {
 
 // Función para obtener todas las materias
 export async function obtenerTodasMaterias() {
-  const materias: Materias[] = await prisma.materias.findMany();
+  const materias: Materias[] = await prisma.materias.findMany({
+    take: 5
+  });
   return materias;
 }
 
 // Función para obtener todos los temas
 export async function obtenerTodosTemas() {
-  const temas: Temas[] = await prisma.temas.findMany();
+  const temas: Temas[] = await prisma.temas.findMany({
+    take: 5
+  });
   return temas;
 }
 

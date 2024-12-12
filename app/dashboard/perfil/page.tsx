@@ -62,7 +62,7 @@ export default async function ProfilePage() {
               <p className="text-2xl font-bold">{cantidadCursos}</p>
             </div>
             <div key="Estadistica_usuario2" className="text-center">
-              <p className="text-sm text-muted-foreground">Logros obtenidos</p>
+              <p className="text-sm text-muted-foreground">Logros a completar</p>
               <p className="text-2xl font-bold">{logros.length}</p>
             </div>
             <div key="Estadistica_usuario3" className="text-center">

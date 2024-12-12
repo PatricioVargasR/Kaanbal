@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import Link from "next/link";
 
 // Datos estáticos para los cursos
 const datosCursos = [
@@ -66,9 +67,9 @@ export default function LibraryPage() {
       </div>
 
       <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-        <Input 
-          type="search" 
-          placeholder="Buscar Unidad..." 
+        <Input
+          type="search"
+          placeholder="Buscar Unidad..."
           className="w-full sm:max-w-sm"
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
@@ -88,18 +89,20 @@ export default function LibraryPage() {
 
       {cursos.length > 0 ? (
         <div className="space-y-4">
-          {cursos.map((curso) => (
-            <Card key={curso.id_curso}>
-              <CardHeader>
-                <CardTitle className="text-lg sm:text-xl">{curso.nombre_curso}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm sm:text-base">Cantidad de preguntas: {curso.cantidad_preguntas}</p>
-                <p className="text-sm sm:text-base">
-                  Creado: {curso.fecha_creacion.toLocaleDateString()}
-                </p>
-              </CardContent>
-            </Card>
+          {cursos.map((curso, index) => (
+            <Link href={`/dashboard/curso/${curso.id_curso}`} key={index}>
+              <Card key={curso.id_curso} className="shadow-md rounded-lg border border-gray-300 transition-transform duration-300 transform hover:scale-[1.03] hover:shadow-lg hover:shadow-gray-400 mb-5">
+                <CardHeader>
+                  <CardTitle className="text-lg sm:text-xl">{curso.nombre_curso}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm sm:text-base">Cantidad de preguntas: {curso.cantidad_preguntas}</p>
+                  <p className="text-sm sm:text-base">
+                    Creado: {curso.fecha_creacion.toLocaleDateString()}
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       ) : (
