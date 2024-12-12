@@ -65,9 +65,15 @@ export default function ConversationPage() {
         const result = await response.json();
         toast({
           title: "Curso generado",
-          description: `El curso ha sido generado con éxito: ${result.cursoId}`,
+          description: `El curso ha sido generado con éxito:`,
           variant: "default",
         });
+
+        // Espera 2 segundos antes de redirigir
+        setTimeout(() => {
+          window.location.href = `/dashboard/curso/${result.id_curso}`;
+        }, 1000);  // 2000 ms = 2 segundos
+
       } else {
         toast({
           title: "Error al generar curso",
@@ -144,7 +150,7 @@ export default function ConversationPage() {
       const documento = await response.json()
       return documento
     } catch (error) {
-      console.error('Ocurrió un error: ', error)
+      console.error('Ocurrió un error: ')
     }
   }
 
@@ -159,7 +165,7 @@ export default function ConversationPage() {
         setMensajes(mensajes)
         setDocumento(documento)
       } catch (error) {
-        console.error("Error al cargar los datos:", error)
+        console.error("Error al cargar los datos:")
       }
     }
 

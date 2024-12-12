@@ -1,26 +1,52 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Link from "next/link";
-
-// Datos estáticos para los cursos
-const datosCursos = [
-  { id_curso: 1, nombre_curso: "Curso A", fecha_creacion: new Date("2023-01-01"), cantidad_preguntas: 10 },
-  { id_curso: 2, nombre_curso: "Curso B", fecha_creacion: new Date("2023-03-01"), cantidad_preguntas: 20 },
-  { id_curso: 3, nombre_curso: "Curso C", fecha_creacion: new Date("2023-02-01"), cantidad_preguntas: 5 },
-  { id_curso: 4, nombre_curso: "Curso D", fecha_creacion: new Date("2023-04-01"), cantidad_preguntas: 15 },
-];
+import { useSession } from "next-auth/react";
+import { Cursos } from "@prisma/client";
 
 export default function LibraryPage() {
-  const [cursos, setCursos] = useState([...datosCursos]);
+
+  const [cursos, setCursos] = useState<Cursos[]>([]);
   const [filtro, setFiltro] = useState("reciente");
   const [searchTerm, setSearchTerm] = useState("");
+  const { data: session } = useSession()
+
+  const user = session?.user?.email
+
+  async function obtenerCursos() {
+    try {
+      const response = await fetch(`/api/course/obtenerTodosCursos?id=${user}`, {
+        method: 'GET'
+      })
+
+      const documento = response.json()
+
+      return documento
+    } catch(error) {
+      console.log("Ocurrió un error al obtener los cursos")
+    }
+  }
+
+  useEffect(() => {
+    async function obtenerDatos() {
+      try {
+        const cursos = await obtenerCursos()
+        setCursos(cursos)
+      } catch(error) {
+        console.error("Error al obtener los datos")
+      }
+    }
+
+    obtenerDatos()
+  }, [])
+
 
   const aplicarFiltrosYBusqueda = (criterio: string, busqueda: string) => {
-    let cursosFiltrados = [...datosCursos];
+    let cursosFiltrados = [...cursos];
 
     // Primero aplicamos la búsqueda si existe
     if (busqueda.trim() !== "") {
@@ -32,7 +58,11 @@ export default function LibraryPage() {
     // Luego aplicamos el ordenamiento
     switch (criterio) {
       case "reciente":
-        cursosFiltrados.sort((a, b) => b.fecha_creacion.getTime() - a.fecha_creacion.getTime());
+        cursosFiltrados.sort((a, b) => {
+          const fechaA = a.fecha_creacion ? new Date(a.fecha_creacion) : new Date(0); // Si es null, usa la fecha mínima
+          const fechaB = b.fecha_creacion ? new Date(b.fecha_creacion) : new Date(0); // Si es null, usa la fecha mínima
+          return fechaB.getTime() - fechaA.getTime();
+        });
         break;
       case "ascendente":
         cursosFiltrados.sort((a, b) => a.nombre_curso.localeCompare(b.nombre_curso));
@@ -93,12 +123,20 @@ export default function LibraryPage() {
             <Link href={`/dashboard/curso/${curso.id_curso}`} key={index}>
               <Card key={curso.id_curso} className="shadow-md rounded-lg border border-gray-300 transition-transform duration-300 transform hover:scale-[1.03] hover:shadow-lg hover:shadow-gray-400 mb-5">
                 <CardHeader>
-                  <CardTitle className="text-lg sm:text-xl">{curso.nombre_curso}</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl">
+                    {" "}
+                    {curso ? curso.nombre_curso : 'Cargando...'}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm sm:text-base">Cantidad de preguntas: {curso.cantidad_preguntas}</p>
                   <p className="text-sm sm:text-base">
-                    Creado: {curso.fecha_creacion.toLocaleDateString()}
+                    {" "}
+                    {curso ? `Cantidad de preguntas: ${curso.cantidad_preguntas}`: 'Cargando...' }
+                  </p>
+                  <p className="text-sm sm:text-base">
+                    {curso.fecha_creacion
+                        ? new Date(curso.fecha_creacion).toLocaleDateString()
+                        : "Fecha no disponible"}
                   </p>
                 </CardContent>
               </Card>

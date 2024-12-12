@@ -125,12 +125,17 @@ export default function CreateUnitPage() {
       });
 
       if (response.ok) {
+        const data = await response.json()
         toast({
           title: "Éxito",
           description: "Los datos han sido enviados correctamente.",
           variant: "default",
         });
-        // Aquí puedes redirigir al usuario o hacer alguna acción adicional
+        // Espera 2 segundos antes de redirigir
+        setTimeout(() => {
+          window.location.href = `/dashboard/curso/${data.id_curso}`;
+        }, 1000);  // 2000 ms = 2 segundos
+
       } else {
         toast({
           title: "Error",
